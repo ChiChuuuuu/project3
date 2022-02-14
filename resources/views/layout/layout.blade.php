@@ -184,9 +184,12 @@
 
 </body>
 <!--   Core JS Files  -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
 <script src="{{ asset('assets') }}/js/jquery.min.js" type="text/javascript"></script>
 <script src="{{ asset('assets') }}/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="{{ asset('assets') }}/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+
 
 
 <!--  Forms Validations Plugin -->
