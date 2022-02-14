@@ -13,6 +13,7 @@ class BBookController extends Controller
      */
     public function index()
     {
+
         return view('bbook.index');
     }
 

@@ -47,13 +47,11 @@
         <div class="sidebar-wrapper">
             <div class="user">
                 <div class="info">
-                    <div class="photo">
-                        <img src="{{ asset('assets') }}/img/default-avatar.png" />
-                    </div>
+
 
                     <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                        <span>
-                            Tania Andrew
+                        <span class="text text-center">
+                            {{ Session::get('username') }}
                             <b class="caret"></b>
                         </span>
                     </a>
@@ -80,6 +78,12 @@
                                     <span class="sidebar-normal">Settings</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('logout') }}">
+
+                                    <span class="sidebar-normal">Logout</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -87,7 +91,7 @@
 
             <ul class="nav">
                 <li>
-                    <a href="/">
+                    <a href="dashboard">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
@@ -136,37 +140,40 @@
                         <p>Lịch sử</p>
                     </a>
                 </li>
+                @if (Session::get('isAdmin') == 0)
+                @else
+                    <li>
+                        <a data-toggle="collapse" href="#manament">
+                            <i class="pe-7s-gift"></i>
+                            <p>Quản lí
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="manament">
+                            <ul class="nav">
+                                <li>
+                                    <a href="{{ route('author.index') }}">
+                                        <span class="sidebar-mini">TG</span>
+                                        <span class="sidebar-normal">Tác giả</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('category.index') }}">
+                                        <span class="sidebar-mini">TL</span>
+                                        <span class="sidebar-normal">Thể loại</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('shelf.index') }}">
+                                        <span class="sidebar-mini">TS</span>
+                                        <span class="sidebar-normal">Tủ sách</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
 
-                <li>
-                    <a data-toggle="collapse" href="#manament">
-                        <i class="pe-7s-gift"></i>
-                        <p>Quản lí
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-                    <div class="collapse" id="manament">
-                        <ul class="nav">
-                            <li>
-                                <a href="{{ route('author.index') }}">
-                                    <span class="sidebar-mini">TG</span>
-                                    <span class="sidebar-normal">Tác giả</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('category.index') }}">
-                                    <span class="sidebar-mini">TL</span>
-                                    <span class="sidebar-normal">Thể loại</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('shelf.index') }}">
-                                    <span class="sidebar-mini">TS</span>
-                                    <span class="sidebar-normal">Tủ sách</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
             </ul>
         </div>
     </div>

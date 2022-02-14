@@ -5,9 +5,11 @@ use App\Http\Controllers\BBookController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RBookController;
 use App\Http\Controllers\ShelfController;
 use App\Http\Controllers\StudentController;
+use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,35 +23,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
+//Login
+Route::get('/', [LoginController::class, 'login'])->name('login');
+Route::post('/login-process', [LoginController::class, 'process'])->name('login-process');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+//Dashboard
+Route::middleware([CheckLogin::class])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
+
+
+    Route::prefix('book')->name('book.')->group(function () {
+        Route::get('/insert-by-excel', [BookController::class, 'insertByExcel'])->name('insert-by-excel');
+        Route::post('/insert-by-excel-process', [BookController::class, 'insertByExcelProcess'])->name('insert-by-excel-process');
+        Route::get('/export', [BookController::class, 'export'])->name('export-excel');
+    });
+
+    Route::resource('book', BookController::class);
+
+    Route::resource('bbook', BBookController::class);
+
+    Route::resource('rbook', RBookController::class);
+
+    Route::prefix('student')->name('student.')->group(function () {
+        Route::get('/insert-by-excel', [StudentController::class, 'insertByExcel'])->name('insert-by-excel');
+        Route::post('/insert-by-excel-process', [StudentController::class, 'insertByExcelProcess'])->name('insert-by-excel-process');
+        Route::get('/export', [StudentController::class, 'export'])->name('export-excel');
+    });
+
+    Route::resource('student', StudentController::class);
+
+    Route::resource('history', HistoryController::class);
+
+    Route::resource('author', AuthorController::class);
+
+    Route::resource('category', CategoryController::class);
+
+    Route::resource('shelf', ShelfController::class);
 });
-
-
-Route::prefix('book')->name('book.')->group(function () {
-    Route::get('/insert-by-excel',[BookController::class,'insertByExcel'])->name('insert-by-excel');
-    Route::post('/insert-by-excel-process',[BookController::class,'insertByExcelProcess'])->name('insert-by-excel-process');
-    Route::get('/export',[BookController::class,'export'])->name('export-excel');
-});
-
-Route::resource('book',BookController::class);
-
-Route::resource('bbook',BBookController::class);
-
-Route::resource('rbook',RBookController::class);
-
-Route::prefix('student')->name('student.')->group(function () {
-    Route::get('/insert-by-excel',[StudentController::class,'insertByExcel'])->name('insert-by-excel');
-    Route::post('/insert-by-excel-process',[StudentController::class,'insertByExcelProcess'])->name('insert-by-excel-process');
-    Route::get('/export',[StudentController::class,'export'])->name('export-excel');
-});
-
-Route::resource('student', StudentController::class);
-
-Route::resource('history', HistoryController::class);
-
-Route::resource('author', AuthorController::class);
-
-Route::resource('category', CategoryController::class);
-
-Route::resource('shelf', ShelfController::class);

@@ -184,13 +184,18 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-                    <a href="{{ route('book.create') }}"><button type="button"
-                            class="btn btn-primary btn-fill btn-wd">Thêm sách</button></a>
 
-                    <a href="{{ route('book.insert-by-excel') }}"><button type="button"
-                            class="btn btn-primary btn-fill btn-wd">Thêm sách = excel</button></a>
-                    <a href="{{ route('book.export-excel') }}"><button type="button"
-                            class="btn btn-primary btn-fill btn-wd">Tải file excel mẫu</button></a>
+                    @if (Session::get('isAdmin') == 0)
+                    @else
+                        <a href="{{ route('book.create') }}"><button type="button"
+                                class="btn btn-primary btn-fill btn-wd">Thêm sách</button></a>
+
+                        <a href="{{ route('book.insert-by-excel') }}"><button type="button"
+                                class="btn btn-primary btn-fill btn-wd">Thêm sách = excel</button></a>
+                        <a href="{{ route('book.export-excel') }}"><button type="button"
+                                class="btn btn-primary btn-fill btn-wd">Tải file excel mẫu</button></a>
+                    @endif
+
                 </div>
             </div>
 
