@@ -25,11 +25,24 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
+
+Route::prefix('book')->name('book.')->group(function () {
+    Route::get('/insert-by-excel',[BookController::class,'insertByExcel'])->name('insert-by-excel');
+    Route::post('/insert-by-excel-process',[BookController::class,'insertByExcelProcess'])->name('insert-by-excel-process');
+    Route::get('/export',[BookController::class,'export'])->name('export-excel');
+});
+
 Route::resource('book',BookController::class);
 
 Route::resource('bbook',BBookController::class);
 
 Route::resource('rbook',RBookController::class);
+
+Route::prefix('student')->name('student.')->group(function () {
+    Route::get('/insert-by-excel',[StudentController::class,'insertByExcel'])->name('insert-by-excel');
+    Route::post('/insert-by-excel-process',[StudentController::class,'insertByExcelProcess'])->name('insert-by-excel-process');
+    Route::get('/export',[StudentController::class,'export'])->name('export-excel');
+});
 
 Route::resource('student', StudentController::class);
 

@@ -11,6 +11,8 @@ class BookModel extends Model
 
     protected $table = 'book';
 
+    protected $fillable = ["bookTitle","category","publicationDate","author","language","copiesActual","copiesCurrent","idShelf"];
+
     protected $primaryKey = 'idBook';
     public $timestamps = false;
 }

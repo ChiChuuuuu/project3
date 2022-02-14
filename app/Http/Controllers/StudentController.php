@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StudentExport;
+use App\Imports\StudentImport;
 use App\Models\StudentModel;
 use App\Models\StudentStatusModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -126,5 +129,22 @@ class StudentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function insertByExcel(){
+        return view('student.insert-by-excel');
+    }
+
+    public function insertByExcelProcess(Request $request){
+
+        Excel::import(new StudentImport, $request->file('excel'));
+
+        return redirect(route('student.insert-by-excel'))->with('message', 'Thêm thành công');
+
+    }
+
+    public function export()
+    {
+        return Excel::download(new StudentExport, 'student.xlsx');
     }
 }

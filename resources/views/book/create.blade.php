@@ -15,12 +15,12 @@
                                     @csrf
                                     <div class="form-group">
                                         <label>Tên sách</label>
-                                        <input type="text" class="form-control" name="bookTitle">
+                                        <input type="text" class="form-control" name="bookTitle" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Tác giả</label>
-                                            <select name="author" class="selectpicker" data-title="Single Select"
+                                            <select name="author" class="selectpicker" data-title="Single Select" required
                                                 data-style="btn-default btn-block" data-menu-style="dropdown-blue">
                                                 @foreach ($author as $author)
                                                 <option value="{{ $author->idAuthor }}">{{ $author->nameAuthor }}</option>
@@ -30,7 +30,7 @@
 
                                     <div class="form-group">
                                         <label>Thể loại</label>
-                                        <select name="category" class="selectpicker" data-title="Single Select"
+                                        <select name="category" class="selectpicker" data-title="Single Select" required
                                                 data-style="btn-default btn-block" data-menu-style="dropdown-blue">
                                                 @foreach ($category as $category)
                                                 <option value="{{ $category->idCategory }}">{{ $category->nameCategory }}</option>
@@ -40,22 +40,22 @@
 
                                     <div class="form-group">
                                         <label>Ngôn ngữ</label>
-                                        <input type="text" class="form-control" name="language">
+                                        <input type="text" class="form-control" name="language" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Số lượng</label>
-                                        <input type="number" class="form-control" name="quantity">
+                                        <input type="number" class="form-control" name="quantity" required>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Ngày xuất bản</label>
-                                        <input type="date" class="form-control datepicker" name="publicationDate" />
+                                        <input type="date" class="form-control datepicker" name="publicationDate"  required/>
                                     </div>
 
                                     <div class="form-group">
                                         <label>Tủ sách</label>
-                                        <select name="shelf" class="selectpicker" data-title="Single Select"
+                                        <select name="shelf" class="selectpicker" data-title="Single Select" required
                                                 data-style="btn-default btn-block" data-menu-style="dropdown-blue">
                                                 @foreach ($shelf as $shelf)
                                                 <option value="{{ $shelf->idShelf }}">{{ $shelf->shelfNo }}</option>

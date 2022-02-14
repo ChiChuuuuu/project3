@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BookExport;
+use App\Imports\BookImport;
 use App\Models\AuthorModel;
 use App\Models\BookModel;
 use App\Models\CategoryModel;
 use App\Models\ShelfModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookController extends Controller
 {
@@ -138,5 +141,22 @@ class BookController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function insertByExcel(){
+        return view('book.insert-by-excel');
+    }
+
+    public function insertByExcelProcess(Request $request){
+
+        Excel::import(new BookImport, $request->file('excel'));
+
+        return redirect(route('book.insert-by-excel'))->with('message', 'Thêm thành công');
+
+    }
+
+    public function export()
+    {
+        return Excel::download(new BookExport, 'book.xlsx');
     }
 }

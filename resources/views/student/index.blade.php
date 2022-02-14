@@ -25,13 +25,14 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">#</th>
+                                        <th class="text-center">Mã thẻ</th>
                                         <th>Họ và tên</th>
                                         <th>Ngày sinh</th>
                                         <th>Giới tính</th>
                                         <th>Chuyên ngành</th>
                                         <th>Số điện thoại</th>
                                         <th>Trạng thái</th>
+                                        <th>In thẻ</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -58,6 +59,7 @@
                                                     </div>
                                                 @endif
                                             </td>
+                                            <td></td>
                                             <td class="td-actions">
                                                 <a href="#" rel="tooltip" title="View Profile"
                                                     class="btn btn-info btn-simple btn-xs">
@@ -91,6 +93,10 @@
             @endif
             <a href="{{ route('student.create') }}"><button type="button"
                     class="btn btn-primary btn-fill btn-wd">Thêm</button></a>
+            <a href="{{ route('student.insert-by-excel') }}"><button type="button"
+                    class="btn btn-primary btn-fill btn-wd">Thêm bằng excel</button></a>
+            <a href="{{ route('student.export-excel') }}"><button type="button" class="btn btn-primary btn-fill btn-wd">Tải
+                    file excel mẫu</button></a>
         </div>
 
     @endsection
