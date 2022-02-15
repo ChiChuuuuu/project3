@@ -66,7 +66,7 @@ class BBookController extends Controller
 
         for ($i = 0; $i < count($book); $i++) {
             $datasave = [
-                'idBook' => $book[$i],
+                'idBook' => BookModel::where('bookTitle','=',$book[$i])->value('idBook'),
                 'idStudent' => $idStudent[$i],
                 'fromDate' => $dateCurrent[$i],
                 'toDate' => $dateReturn[$i],
