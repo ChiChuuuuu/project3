@@ -27,22 +27,36 @@
                                             <tr>
                                                 <td></td>
                                                 <td>Mã thẻ thư viện</td>
+                                                <td>Thông tin thẻ</td>
                                                 <td>Mã sách</td>
                                                 <td>Tên Sách</td>
                                                 <td>Ngày mượn</td>
                                                 <td>Ngày trả dự kiến</td>
-                                                <td><a href="#" class="btn btn-info addRow">+</a> <br><br></td>
+                                                <td>Ghi chú</td>
+                                                <td>
+                                                    <button class="btn btn-info addRow">+</button>
+                                                    <br><br></td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <input type="text" class="form-control hidden" name="idStaff[]"
-                                        value="{{ Session::get('id') }}" >
+                                                value="{{ Session::get('id') }}" >
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control" name="idStudent[]" required>
+                                                    <input list="hsinh" id="idStudent" name="idStudent[]" class="form-control" />
+                                                    <datalist id="hsinh">
+                                                        @foreach ($student as $student)
+                                                            <option value="{{ $student->idStudent }}">{{ $student->name }}</option>
+                                                        @endforeach
+                                                    </datalist>
                                                 </td>
                                                 <td>
-                                                    <input list="sach" id="book" name="book[]" class="form-control" />
+                                                    <select id="infoStudent" class="form-control" disabled>
+
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input list="sach" id="book" name="book[]" class="form-control" required/>
                                                     <datalist id="sach">
                                                         @foreach ($book as $book)
                                                             <option value="{{ $book->idBook }}">{{ $book->bookTitle }}</option>
@@ -50,12 +64,9 @@
                                                     </datalist>
                                                 </td>
                                                 <td>
-                                                    <input list="sach2" id="book2" class="form-control" />
-                                                    <datalist id="sach2">
-                                                        @foreach ($book2 as $book2)
-                                                            <option value="{{ $book2->bookTitle }}">{{ $book2->idBook }}</option>
-                                                        @endforeach
-                                                    </datalist>
+                                                    <select id="book2" class="form-control" disabled>
+
+                                                    </select>
                                                 </td>
                                                 <td>
                                                     <input type="date" class="form-control" name="dateCurrent[]"
@@ -64,7 +75,11 @@
                                                 <td>
                                                     <input type="date" class="form-control" name="dateReturn[]">
                                                 </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="note[]">
+                                                </td>
                                             </tr>
+
                                         </tbody>
                                     </table>
 
@@ -127,33 +142,76 @@
     </div>
 
     <script type="text/javascript">
+        $('#book').change(function(e) {
+            $('#book2').html('');
+            var idBook = $(this).val();
+            var currentURL = window.location.href;
+            var URL = currentURL + "/get-books/" + idBook;
+            $.ajax({
+                type: "get",
+                url: URL,
+                success: function (response) {
+                    $.each(response, function(index,value){
+                        var option = `
+                            <option value="${ value.bookTitle }"> ${ value.bookTitle } </option>
+                        `;
+                        $('#book2').append(option);
+                    })
+                }
+            });
+        })
+
+        $('#idStudent').change(function(e) {
+            $('#infoStudent').html('');
+            var idStudent = $(this).val();
+            var currentURL = window.location.href;
+            var URL = currentURL + "/get-student/" + idStudent;
+            $.ajax({
+                type: "get",
+                url: URL,
+                success: function (response) {
+                    $.each(response, function(index,value){
+                        var option = `
+                            <option value="${ value.dob }"> ${ value.name } | ${ value.dob } </option>
+                        `;
+                        $('#infoStudent').append(option);
+                    })
+                }
+            });
+        })
+
+
         $('.addRow').on('click', function() {
             addRow();
         });
 
         function addRow() {
             var tr =
-
             '<tr>'+
                 '<td>'+ '<input type="text" class="form-control hidden" name="idStaff[]" value="{{ Session::get('id') }}" >' +'</td>'+
                 '<td>'+
-                    '<input type="text" class="form-control" name="idStudent[]" required>'+
+                    '<input list="hsinh" id="idStudent" name="idStudent[]" class="form-control" />'+
+                        '<datalist id="hsinh">'+
+                            '@foreach ($student as $student)'+
+                                '<option value="'+'{{'+ $student->idStudent+ '}}'+ '"></option>'+
+                            '@endforeach'+
+                        '</datalist>'+
                 '</td>'+
                 '<td>'+
-                    '<input list="sach" id="book" name="book[]" class="form-control" />'+
+                    '<input type="text" class="form-control" name="infoStudent" disabled>'+
+                '</td>'+
+                '<td>'+
+                    '<input list="sach" id="book" name="book[]" class="form-control" required/>'+
                     '<datalist id="sach">'+
                         '@foreach ($book as $book)'+
-                        '<option value="' + '{{' + $book->idBook +'}}' + '"></option>'+
+                        '<option value="' + '{{'+ $book->idBook +'}}' + '"></option>'+
                         '@endforeach'+
                     '</datalist>'+
                 '</td>'+
                 '<td>'+
-                    '<input list="sach2" id="book2" class="form-control" />'+
-                    '<datalist id="sach2">'+
-                        '@foreach ($book2 as $book2)'+
-                        '<option value="' + '{{' + $book2->bookTitle +'}}' + '"></option>'+
-                        '@endforeach'+
-                    '</datalist>'+
+                    '<select id="book2" class="form-control" disabled>'+
+
+                    '</select>'+
                 '</td>'+
                 '<td>'+
                     '<input type="date" class="form-control" name="dateCurrent[]"'+
@@ -163,7 +221,10 @@
                 '<input type="date" class="form-control" name="dateReturn[]">'+
                 '</td>'+
                 '<td>'+
-                    '<a href="#" class="btn btn-danger remove">-</a> '+
+                        '<input type="text" class="form-control" name="note[]">'+
+                '</td>'+
+                '<td>'+
+                    '<button class="btn btn-danger remove">-</button> '+
                     '</td>'+
             '</tr>';
             $('tbody').append(tr);
@@ -172,6 +233,8 @@
         $('tbody').on('click', '.remove', function() {
             $(this).parent().parent().remove();
         })
+
+
     </script>
 
 @endsection

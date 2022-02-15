@@ -43,6 +43,11 @@ Route::middleware([CheckLogin::class])->group(function () {
 
     Route::resource('book', BookController::class);
 
+    Route::prefix('bbook')->name('bbook.')->group(function () {
+        Route::get('/get-books/{id}',[BBookController::class,'getAllBookById'])->name('get-books');
+        Route::get('/get-student/{id}',[BBookController::class,'getAllInfoById'])->name('get-student');
+    });
+
     Route::resource('bbook', BBookController::class);
 
     Route::resource('rbook', RBookController::class);

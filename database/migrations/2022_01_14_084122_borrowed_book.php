@@ -25,6 +25,7 @@ class BorrowedBook extends Migration
             $table->unsignedBigInteger('id');
             $table->foreign('id')->references('id')->on('staff');
             $table->boolean('status');
+            $table->string('note');
         });
     }
 

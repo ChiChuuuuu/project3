@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BBookModel;
 use App\Models\BookModel;
+use App\Models\StudentModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,13 +19,26 @@ class BBookController extends Controller
     public function index()
     {
         $mytime = Carbon::now();
+
         $book = BookModel::all();
         $book2 = BookModel::all();
+        $student = StudentModel::all();
         return view('bbook.index', [
             'book' => $book,
             'book2' => $book2,
-            'mytime' => $mytime
+            'mytime' => $mytime,
+            'student' => $student
         ]);
+    }
+
+    public function getAllBookById($id){
+        $listBook = BookModel::where('idBook', $id)->get();
+        return $listBook;
+    }
+
+    public function getAllInfoById($id){
+        $listStudent = StudentModel::where('idStudent', $id)->get();
+        return $listStudent;
     }
 
     /**
