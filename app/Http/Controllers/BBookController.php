@@ -20,12 +20,16 @@ class BBookController extends Controller
     {
         $mytime = Carbon::now();
 
-        $book = BookModel::all();
-        $book2 = BookModel::all();
+        $book = BookModel::join('shelf','shelf.idShelf','=','book.idShelf')
+        ->join('shelf_status','shelf_status.idStatus','=','shelf.status')
+        ->where('shelf.status','=',2)
+        ->get();
+
+        'SELECT * FROM `book` inner JOIN shelf ON book.idShelf = shelf.idShelf inner JOIN shelf_status ON shelf.status = shelf_status.idStatus WHERE shelf.status = 2';
+
         $student = StudentModel::all();
         return view('bbook.index', [
             'book' => $book,
-            'book2' => $book2,
             'mytime' => $mytime,
             'student' => $student
         ]);
