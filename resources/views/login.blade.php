@@ -32,7 +32,7 @@
 <body>
 
     <div class="wrapper wrapper-full-page">
-        <div class="full-page login-page" data-color="orange" data-image="../../assets/img/full-screen-image-1.jpg">
+        <div class="full-page login-page" data-image="../../assets/img/background2.jpg">
 
             <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
             <div class="content">

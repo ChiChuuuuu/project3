@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BBookModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HistoryController extends Controller
@@ -11,9 +13,38 @@ class HistoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('history.index');
+    public function index(){
+        $history = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+        ->join('student','student.idStudent','borrowed_book.idStudent')
+        ->join('staff','staff.id','borrowed_book.id')
+        ->join('author','author.idAuthor','book.author')
+        ->where('status','1')
+        ->get();
+        $history2 = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+        ->join('student','student.idStudent','borrowed_book.idStudent')
+        ->join('staff','staff.id','borrowed_book.id')
+        ->join('author','author.idAuthor','book.author')
+        ->where('status','0')
+        ->get();
+        $history3 = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+        ->join('student','student.idStudent','borrowed_book.idStudent')
+        ->join('staff','staff.id','borrowed_book.id')
+        ->join('author','author.idAuthor','book.author')
+        ->where('staff.isAdmin','=',1)
+        ->get();
+        return view('history.index',[
+            'history' => $history,
+            'history2' => $history2
+        ]);
+    }
+
+    public function getStatus(Request $request,$idBB,$status){
+        $mytime = Carbon::now();
+        BBookModel::where('idBB',$idBB)->update([
+            'status' => $status,
+            'actualDate' => $mytime
+        ]);
+        return redirect(route('history.index'));
     }
 
     /**
@@ -56,7 +87,7 @@ class HistoryController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -68,7 +99,7 @@ class HistoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -81,4 +112,5 @@ class HistoryController extends Controller
     {
         //
     }
+
 }

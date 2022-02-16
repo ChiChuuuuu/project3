@@ -42,7 +42,8 @@
                                                     <input list="hsinh" id="idStudent" name="idStudent[]" class="form-control" />
                                                         <datalist id="hsinh">
                                                             @foreach ($student as $student)
-                                                                <option value="{{ $student['idStudent'] }}">{{ $student->idStudent }} | {{ $student->name }} | {{ $student->dob }} </option>
+                                                                <option value="{{ $student['idStudent'] }}">{{ $student->idStudent }} | {{ $student->name }} | {{ date('d-m-Y', strtotime($student->dob));
+                                                                }} </option>
                                                             @endforeach
                                                         </datalist>
                                                 </td>
@@ -59,7 +60,7 @@
                                                         value="{{ $mytime->format('Y-m-d') }}">
                                                 </td>
                                                 <td>
-                                                    <input type="date" class="form-control" name="dateReturn[]">
+                                                    <input type="date" class="form-control" name="dateReturn[]" required>
                                                 </td>
                                                 <td>
                                                     <input type="text" class="form-control" name="note[]">
@@ -117,7 +118,18 @@
 
                                     <br><br><br>
                                     <button type="submit" class="btn btn-fill btn-info">Thêm</button>
-                                </form>
+                                </form><br><br>
+
+                                @if (session()->has('danger'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('danger') }}
+                                </div>
+                            @endif
+                            @if (session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('message') }}
+                                </div>
+                            @endif
                             </div>
                         </div> <!-- end card -->
                     </div>

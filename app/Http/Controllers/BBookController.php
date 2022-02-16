@@ -25,9 +25,7 @@ class BBookController extends Controller
         ->where('shelf.status','=',2)
         ->get();
 
-        'SELECT * FROM `book` inner JOIN shelf ON book.idShelf = shelf.idShelf inner JOIN shelf_status ON shelf.status = shelf_status.idStatus WHERE shelf.status = 2';
-
-        $student = StudentModel::all();
+        $student = StudentModel::where('idStatus','=',1)->get();
         return view('bbook.index', [
             'book' => $book,
             'mytime' => $mytime,
@@ -44,6 +42,8 @@ class BBookController extends Controller
         $listStudent = StudentModel::where('idStudent', $id)->get();
         return $listStudent;
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -67,19 +67,24 @@ class BBookController extends Controller
         $book = $request->get('book');
         $dateCurrent = $request->get('dateCurrent');
         $dateReturn = $request->get('dateReturn');
+        $note = $request->get('note');
 
-        for ($i = 0; $i < count($book); $i++) {
-            $datasave = [
-                'idBook' => BookModel::where('bookTitle','=',$book[$i])->value('idBook'),
-                'idStudent' => $idStudent[$i],
-                'fromDate' => $dateCurrent[$i],
-                'toDate' => $dateReturn[$i],
-                'id' => $idStaff[$i],
-            ];
-            DB::table('borrowed_book')->insert($datasave);
-        };
-        return redirect(route('book.index'))->with('message', 'Mượn thành công');
-
+        if($dateCurrent > $dateReturn){
+            return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+        } else {
+            for ($i = 0; $i < count($book); $i++) {
+                $datasave = [
+                    'idBook' => BookModel::where('bookTitle','=',$book[$i])->value('idBook'),
+                    'idStudent' => $idStudent[$i],
+                    'fromDate' => $dateCurrent[$i],
+                    'toDate' => $dateReturn[$i],
+                    'id' => $idStaff[$i],
+                    'note' => $note[$i]
+                ];
+                DB::table('borrowed_book')->insert($datasave);
+            };
+            return redirect(route('book.index'))->with('message', 'Mượn thành công');
+        }
     }
 
     /**

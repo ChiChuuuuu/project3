@@ -1,238 +1,157 @@
 @extends('layout.layout')
 @section('main')
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<div class="main-panel">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-minimize">
-                <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon">
-                    <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
-                    <i class="fa fa-navicon visible-on-sidebar-mini"></i>
-                </button>
-            </div>
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Extended Tables</a>
-            </div>
-            <div class="collapse navbar-collapse">
-
-                <form class="navbar-form navbar-left navbar-search-form" role="search">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                        <input type="text" value="" class="form-control" placeholder="Search...">
-                    </div>
-                </form>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="../charts.html">
-                            <i class="fa fa-line-chart"></i>
-                            <p>Stats</p>
-                        </a>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-gavel"></i>
-                            <p class="hidden-md hidden-lg">
-                                Actions
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Create New Post</a></li>
-                            <li><a href="#">Manage Something</a></li>
-                            <li><a href="#">Do Nothing</a></li>
-                            <li><a href="#">Submit to live</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Another Action</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="notification">5</span>
-                            <p class="hidden-md hidden-lg">
-                                Notifications
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Notification 1</a></li>
-                            <li><a href="#">Notification 2</a></li>
-                            <li><a href="#">Notification 3</a></li>
-                            <li><a href="#">Notification 4</a></li>
-                            <li><a href="#">Another notification</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown dropdown-with-icons">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-list"></i>
-                            <p class="hidden-md hidden-lg">
-                                More
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <ul class="dropdown-menu dropdown-with-icons">
-                            <li>
-                                <a href="#">
-                                    <i class="pe-7s-mail"></i> Messages
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="pe-7s-help1"></i> Help Center
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="pe-7s-tools"></i> Settings
-                                </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <i class="pe-7s-lock"></i> Lock Screen
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="text-danger">
-                                    <i class="pe-7s-close-circle"></i>
-                                    Log out
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div class="main-panel">
+        <nav class="navbar navbar-default">
+        </nav>
 
 
-    <div class="main-content">
-        <div class="container-fluid">
-            <div class="row">
-
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="row">
                     <div class="card">
                         <div class="header">
-                            <h4 class="title">Table with Links</h4>
-                            <p class="category">Here is a subtitle for this table</p>
+                            <h4 class="title">Lịch sử mượn sách</h4>
                         </div>
+                        <form class="navbar-form navbar-left navbar-search-form" role="search">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" value="" name="search" class="form-control" placeholder="Search...">
+                            </div>
+                        </form>
                         <div class="content table-responsive table-full-width">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th class="text-center">#</th>
-                                        <th>Name</th>
-                                        <th>Job Position</th>
-                                        <th class="text-right">Salary</th>
-                                        <th class="text-right">Actions</th>
+                                        <th>Tên sách</th>
+                                        <th>Tác giả</th>
+                                        <th>Người mượn</th>
+                                        <th>Ngày mượn</th>
+                                        <th>Ngày hẹn trả sách</th>
+                                        <th>Ghi chú</th>
+                                        <th>Thủ thư cho mượn</th>
+                                        <th>Tình trạng</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>Andrew Mike</td>
-                                        <td>Develop</td>
-                                        <td class="text-right">&euro; 99,225</td>
-                                        <td class="td-actions text-right">
-                                            <a href="#" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
 
-                                        <td class="text-center">2</td>
-                                        <td>John Doe</td>
-                                        <td>Design</td>
-                                        <td class="text-right">&euro; 89,241</td>
-                                        <td class="td-actions text-right">
-                                            <a href="#" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        @forelse ($history as $history)
+                                            <tr>
+                                                <td> </td>
+                                                <td> {{ $history->bookTitle }} </td>
+                                                <td> {{ $history->nameAuthor }} </td>
+                                                <td> {{ $history->name }} |
+                                                    {{ date('d-m-Y', strtotime($history->dob)) }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                                </td>
+                                                <td> {{ $history->note }} </td>
+                                                <td> {{ $history->username }} </td>
+                                                <th>
+                                                    @if ($history->status == 1)
+                                                        <span>Đang mượn</span>
+                                                    @endif
+                                                </th>
+                                                <td>
+                                                    <a href="{{ url('/get-status', [$history->idBB,'0']) }}"
+                                                        rel="tooltip"
+                                                        class="btn btn-success btn-xs">
+                                                        Trả sách
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <th>Khong co du lieu</th>
+                                            </tr>
+                                        @endforelse
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+
+
+                        {{-- {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }} --}}
+                    </div>
+
+                    <br><br>
+
+                    <div class="card">
+                        <div class="header">
+                            <h4 class="title">Lịch sử trả sách</h4>
+                        </div>
+                        <form class="navbar-form navbar-left navbar-search-form" role="search">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" value="" name="search" class="form-control" placeholder="Search...">
+                            </div>
+                        </form>
+                        <div class="content table-responsive table-full-width">
+                            <table class="table">
+                                <thead>
                                     <tr>
-                                        <td class="text-center">3</td>
-                                        <td>Alex Mike</td>
-                                        <td>Design</td>
-                                        <td class="text-right">&euro; 92,144</td>
-                                        <td class="td-actions text-right">
-                                            <a href="#" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
+                                        <th class="text-center">#</th>
+                                        <th>Tên sách</th>
+                                        <th>Tác giả</th>
+                                        <th>Người mượn</th>
+                                        <th>Ngày mượn</th>
+                                        <th>Ngày hẹn trả sách</th>
+                                        <th>Ngày trả sách</th>
+                                        <th>Ghi chú</th>
+                                        <th>Tình trạng</th>
                                     </tr>
-                                    <tr>
-                                        <td class="text-center">4</td>
-                                        <td>Mike Monday</td>
-                                        <td>Marketing</td>
-                                        <td class="text-right">&euro; 49,990</td>
-                                        <td class="td-actions text-right">
-                                            <a href="#" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">5</td>
-                                        <td>Paul Dickens</td>
-                                        <td>Communication</td>
-                                        <td class="text-right">&euro; 69,201</td>
-                                        <td class="td-actions text-right">
-                                            <a href="#" rel="tooltip" title="View Profile" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-user"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Edit Profile" class="btn btn-success btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="#" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
+                                </thead>
+                                <tbody>
+                                        @forelse ($history2 as $history2)
+                                            <tr>
+                                                <td> </td>
+                                                <td> {{ $history2->bookTitle }} </td>
+                                                <td> {{ $history2->nameAuthor }} </td>
+                                                <td> {{ $history2->name }} </td>
+                                                <td> {{ date('d-m-Y', strtotime($history2->fromDate)) }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history2->toDate)) }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history2->actualDate)) }}
+                                                </td>
+                                                <td> {{ $history2->note }} </td>
+                                                <td>
+                                                    @if ($history2->status == 0)
+                                                        <span style="color:blue">Đã trả sách</span>
+                                                    @endif
+                                                </td>
+                                                <td></td>
+                                            </tr>
+
+                                        @empty
+                                            <tr>
+                                                <th></th>
+                                                <th>Khong co du lieu</th>
+                                            </tr>
+                                        @endforelse
                                 </tbody>
                             </table>
                         </div>
+
+
+                        {{-- {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }} --}}
                     </div>
 
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+
+                </div>
+            </div>
         </div>
-    </div>
 
-
-</div>
-
-@endsection
+    @endsection

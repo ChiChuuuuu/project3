@@ -10,6 +10,8 @@ use App\Http\Controllers\RBookController;
 use App\Http\Controllers\ShelfController;
 use App\Http\Controllers\StudentController;
 use App\Http\Middleware\CheckLogin;
+use App\Models\BBookModel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +61,8 @@ Route::middleware([CheckLogin::class])->group(function () {
     });
 
     Route::resource('student', StudentController::class);
+
+    Route::get('/get-status/{idBB}/{status}',[HistoryController::class,'getStatus'])->name('get-status');
 
     Route::resource('history', HistoryController::class);
 
