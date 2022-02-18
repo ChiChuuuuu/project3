@@ -60,6 +60,8 @@ Route::middleware([CheckLogin::class])->group(function () {
         Route::get('/export', [StudentController::class, 'export'])->name('export-excel');
     });
 
+    Route::get('/student/word-export/{id}', [StudentController::class, 'wordExport'])->name('word-export');
+
     Route::resource('student', StudentController::class);
 
     Route::get('/get-status/{idBB}/{status}',[HistoryController::class,'getStatus'])->name('get-status');

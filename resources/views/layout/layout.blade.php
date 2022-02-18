@@ -117,12 +117,6 @@
                                     <span class="sidebar-normal">Mượn sách</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ route('rbook.index') }}">
-                                    <span class="sidebar-mini">TS</span>
-                                    <span class="sidebar-normal">Trả sách</span>
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </li>

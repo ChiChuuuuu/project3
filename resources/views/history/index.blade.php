@@ -17,7 +17,8 @@
                         <form class="navbar-form navbar-left navbar-search-form" role="search">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" value="" name="search" class="form-control" placeholder="Search...">
+                                <input type="text" value="{{ $search }}" name="search" class="form-control"
+                                    placeholder="Search...">
                             </div>
                         </form>
                         <div class="content table-responsive table-full-width">
@@ -38,50 +39,47 @@
                                 </thead>
                                 <tbody>
 
-                                        @forelse ($history as $history)
-                                            <tr>
-                                                <td> </td>
-                                                <td> {{ $history->bookTitle }} </td>
-                                                <td> {{ $history->nameAuthor }} </td>
-                                                <td> {{ $history->name }} |
-                                                    {{ date('d-m-Y', strtotime($history->dob)) }}
-                                                </td>
-                                                <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
-                                                </td>
-                                                <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
-                                                </td>
-                                                <td> {{ $history->note }} </td>
-                                                <td> {{ $history->username }} </td>
-                                                <th>
-                                                    @if ($history->status == 1)
-                                                        <span>Đang mượn</span>
-                                                    @endif
-                                                </th>
-                                                <td>
-                                                    <a href="{{ url('/get-status', [$history->idBB,'0']) }}"
-                                                        rel="tooltip"
-                                                        class="btn btn-success btn-xs">
-                                                        Trả sách
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <th>Khong co du lieu</th>
-                                            </tr>
-                                        @endforelse
+                                    @forelse ($historys as $history)
+                                        <tr>
+                                            <td> </td>
+                                            <td> {{ $history->bookTitle }} </td>
+                                            <td> {{ $history->nameAuthor }} </td>
+                                            <td> {{ $history->name }} |
+                                                {{ date('d-m-Y', strtotime($history->dob)) }}
+                                            </td>
+                                            <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                            </td>
+                                            <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                            </td>
+                                            <td> {{ $history->note }} </td>
+                                            <td> {{ $history->username }} </td>
+                                            <th>
+                                                @if ($history->status == 1)
+                                                    <span>Đang mượn</span>
+                                                @endif
+                                            </th>
+                                            <td>
+                                                <a href="{{ url('/get-status', [$history->idBB, '0']) }}" rel="tooltip"
+                                                    class="btn btn-success btn-xs">
+                                                    Trả sách
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <th></th>
+                                            <th>Khong co du lieu</th>
+                                        </tr>
+                                    @endforelse
 
                                 </tbody>
                             </table>
-
+                            {{ $historys->appends(['search' => $search])->links('pagination::bootstrap-4') }}
                         </div>
 
 
 
-                        {{-- {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }} --}}
                     </div>
-
-                    <br><br>
 
                     <div class="card">
                         <div class="header">
@@ -90,7 +88,8 @@
                         <form class="navbar-form navbar-left navbar-search-form" role="search">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" value="" name="search" class="form-control" placeholder="Search...">
+                                <input type="text" value="{{ $search2 }}" name="search2" class="form-control"
+                                    placeholder="Search...">
                             </div>
                         </form>
                         <div class="content table-responsive table-full-width">
@@ -109,49 +108,57 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        @forelse ($history2 as $history2)
-                                            <tr>
-                                                <td> </td>
-                                                <td> {{ $history2->bookTitle }} </td>
-                                                <td> {{ $history2->nameAuthor }} </td>
-                                                <td> {{ $history2->name }} </td>
-                                                <td> {{ date('d-m-Y', strtotime($history2->fromDate)) }}
-                                                </td>
-                                                <td> {{ date('d-m-Y', strtotime($history2->toDate)) }}
-                                                </td>
-                                                <td> {{ date('d-m-Y', strtotime($history2->actualDate)) }}
-                                                </td>
-                                                <td> {{ $history2->note }} </td>
-                                                <td>
-                                                    @if ($history2->status == 0)
+                                    @forelse ($history2s as $history2)
+                                        <tr>
+                                            <td> </td>
+                                            <td> {{ $history2->bookTitle }} </td>
+                                            <td> {{ $history2->nameAuthor }} </td>
+                                            <td> {{ $history2->name }} |
+                                                {{ date('d-m-Y', strtotime($history2->dob)) }}
+                                            </td>
+                                            <td> {{ date('d-m-Y', strtotime($history2->fromDate)) }}
+                                            </td>
+                                            <td> {{ date('d-m-Y', strtotime($history2->toDate)) }}
+                                            </td>
+                                            <td> {{ date('d-m-Y', strtotime($history2->actualDate)) }}
+                                            </td>
+                                            <td> {{ $history2->note }} </td>
+                                            <td>
+                                                @if ($history2->status == 0)
+                                                    @if ($history2->actualDate > $history2->toDate)
+                                                        <span style="color:blue">Đã trả sách</span><br>
+                                                        <span style="color:red">(Quá hạn)</span>
+                                                    @else
                                                         <span style="color:blue">Đã trả sách</span>
                                                     @endif
-                                                </td>
-                                                <td></td>
-                                            </tr>
+                                                @endif
+                                            </td>
+                                            <td></td>
+                                        </tr>
 
-                                        @empty
-                                            <tr>
-                                                <th></th>
-                                                <th>Khong co du lieu</th>
-                                            </tr>
-                                        @endforelse
+                                    @empty
+                                        <tr>
+                                            <th></th>
+                                            <th>Khong co du lieu</th>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
+
                             </table>
+                            {{ $history2s->appends(['search2' => $search2])->links('pagination::bootstrap-4') }}
                         </div>
 
-
-                        {{-- {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }} --}}
                     </div>
 
-                    @if (session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
+                    <div class="row">
 
+                        @if (session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
+
+                    </div>
                 </div>
             </div>
-        </div>
-
-    @endsection
+        @endsection

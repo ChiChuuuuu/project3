@@ -59,12 +59,8 @@
                                                     </div>
                                                 @endif
                                             </td>
-                                            <td></td>
+                                            <td><a href="{{ url('/student/word-export',[$students->idStudent])}}">In thẻ</a></td>
                                             <td class="td-actions">
-                                                <a href="#" rel="tooltip" title="View Profile"
-                                                    class="btn btn-info btn-simple btn-xs">
-                                                    <i class="fa fa-user"></i>
-                                                </a>
                                                 <a href="{{ route('student.edit', ['student' => $students->idStudent]) }}"
                                                     rel="tooltip" title="Edit Profile"
                                                     class="btn btn-success btn-simple btn-xs">

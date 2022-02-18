@@ -25,6 +25,34 @@
                                     <div class="alert alert-success">
                                         {{ session()->get('message') }}
                                     </div>
+                                @endif<br><br>
+
+                                @if (session()->has('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session()->get('error') }}
+                                    </div>
+                                @endif
+
+                                <br><br><br><br>
+                                @if (session()->has('failures'))
+                                    <table class="table table-danger">
+                                        <tr>
+                                            <th>Lỗi</th>
+                                            <th></th>
+                                            <th>Dòng</th>
+                                        </tr>
+                                        @foreach (session()->get('failures') as $validation)
+                                            <tr>
+                                                <td>
+                                                    @foreach ($validation->errors() as $e)
+                                                        {{ $e }}
+                                                    @endforeach
+                                                </td>
+                                                <td>{{ $validation->values()[$validation->attribute()] }}</td>
+                                                <td>{{ $validation->row() }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
                                 @endif
                             </div>
                         </div> <!-- end card -->

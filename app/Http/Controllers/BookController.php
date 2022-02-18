@@ -8,6 +8,7 @@ use App\Models\AuthorModel;
 use App\Models\BookModel;
 use App\Models\CategoryModel;
 use App\Models\ShelfModel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -149,7 +150,25 @@ class BookController extends Controller
 
     public function insertByExcelProcess(Request $request){
 
-        Excel::import(new BookImport, $request->file('excel'));
+        $book = Excel::toArray(new BookImport, $request->file('excel'));
+
+        try {
+            $students = $book[0][0];
+            $name = $students['ten_sach'];
+            $dob = $students['the_loai'];
+            $department = $students['tac_gia'];
+            $gender = $students['ngon_ngu'];
+            $phone = $students['ke_sach'];
+            // if($name == '' && $dob == '' && $department == '' && $gender == '' && $phone == '' ){
+            //     throw new Exception();
+            // }
+        } catch (Exception $e) {
+            return redirect(route('student.insert-by-excel'))->with('error', 'File không đúng định dạng hoặc không có dữ liệu');
+        }
+
+        $file = $request->file('excel')->store('import');
+        $import = new BookImport;
+        $import->import($file);
 
         return redirect(route('book.insert-by-excel'))->with('message', 'Thêm thành công');
 

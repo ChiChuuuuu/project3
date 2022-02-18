@@ -6,9 +6,13 @@ use App\Exports\StudentExport;
 use App\Imports\StudentImport;
 use App\Models\StudentModel;
 use App\Models\StudentStatusModel;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
+
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class StudentController extends Controller
 {
@@ -137,7 +141,29 @@ class StudentController extends Controller
 
     public function insertByExcelProcess(Request $request){
 
-        Excel::import(new StudentImport, $request->file('excel'));
+        $student = Excel::toArray(new StudentImport, $request->file('excel'));
+
+        try {
+            $students = $student[0][0];
+            $name = $students['ho_va_ten'];
+            $dob = $students['ngay_sinh'];
+            $department = $students['chuyen_nganh'];
+            $gender = $students['gioi_tinh'];
+            $phone = $students['so_dien_thoai'];
+            // if($name == '' && $dob == '' && $department == '' && $gender == '' && $phone == '' ){
+            //     throw new Exception();
+            // }
+        } catch (Exception $e) {
+            return redirect(route('student.insert-by-excel'))->with('error', 'File không đúng định dạng hoặc không có dữ liệu');
+        }
+
+        $file = $request->file('excel')->store('import');
+        $import = new StudentImport;
+        $import->import($file);
+
+        if ($import->failures()->isNotEmpty()) {
+            return back()->withFailures($import->failures());
+        }
 
         return redirect(route('student.insert-by-excel'))->with('message', 'Thêm thành công');
 
@@ -146,5 +172,17 @@ class StudentController extends Controller
     public function export()
     {
         return Excel::download(new StudentExport, 'student.xlsx');
+    }
+
+    public function wordExport($id){
+        $user = StudentModel::findOrFail($id);
+        $templateProcessor = new TemplateProcessor('word-template/user.docx');
+        $templateProcessor->setValue('idStudent',$user->idStudent);
+        $templateProcessor->setValue('name',$user->name);
+        $templateProcessor->setValue('dob',date('d-m-Y', strtotime($user->dob)));
+        $templateProcessor->setValue('department',$user->department);
+        $fileName = $user->name;
+        $templateProcessor->saveAs($fileName.'.docx');
+        return response()->download($fileName.'.docx')->deleteFileAfterSend(true);
     }
 }

@@ -177,7 +177,9 @@
                                 </tbody>
                             </table>
                         </div>
+
                         {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }}
+
                     </div>
                     @if (session()->has('message'))
                         <div class="alert alert-success">

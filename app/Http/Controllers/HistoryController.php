@@ -13,28 +13,34 @@ class HistoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(){
-        $history = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+    public function index(Request $request){
+        $search = $request->get('search');
+        $search2 = $request->get('search2');
+
+        //Mượn
+        $historys = BBookModel::join('book','book.idBook','borrowed_book.idBook')
         ->join('student','student.idStudent','borrowed_book.idStudent')
         ->join('staff','staff.id','borrowed_book.id')
         ->join('author','author.idAuthor','book.author')
         ->where('status','1')
-        ->get();
-        $history2 = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+        ->where('name','LIKE',"%$search%")->paginate(5);
+
+        // //Trả
+        $history2s = BBookModel::join('book','book.idBook','borrowed_book.idBook')
         ->join('student','student.idStudent','borrowed_book.idStudent')
         ->join('staff','staff.id','borrowed_book.id')
         ->join('author','author.idAuthor','book.author')
         ->where('status','0')
-        ->get();
-        $history3 = BBookModel::join('book','book.idBook','borrowed_book.idBook')
-        ->join('student','student.idStudent','borrowed_book.idStudent')
-        ->join('staff','staff.id','borrowed_book.id')
-        ->join('author','author.idAuthor','book.author')
-        ->where('staff.isAdmin','=',1)
-        ->get();
+        ->where('name','LIKE',"%$search2%")
+        ->orWhere('student.idStudent','LIKE',"%$search2%")
+        ->paginate(5,['*'],'other_page');
+
+
         return view('history.index',[
-            'history' => $history,
-            'history2' => $history2
+            'historys' => $historys,
+            'history2s' => $history2s,
+            'search' => $search,
+            'search2' => $search2,
         ]);
     }
 

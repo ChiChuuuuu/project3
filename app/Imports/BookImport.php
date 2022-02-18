@@ -6,6 +6,7 @@ use App\Models\AuthorModel;
 use App\Models\BookModel;
 use App\Models\CategoryModel;
 use App\Models\ShelfModel;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -16,6 +17,8 @@ class BookImport implements ToModel, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
+
+    use Importable;
     public function model(array $row)
     {
 
@@ -27,8 +30,8 @@ class BookImport implements ToModel, WithHeadingRow
             "publicationDate" => date("Y-m-d", strtotime($date)),
             "author" => AuthorModel::where('nameAuthor',$row["tac_gia"])->value('idAuthor'),
             "language" => $row["ngon_ngu"],
-            "copiesActual" => $row["so_luong"],
-            "copiesCurrent" => $row["so_luong"],
+            // "copiesActual" => $row["so_luong"],
+            // "copiesCurrent" => $row["so_luong"],
             "idShelf" => ShelfModel::where('shelfNo',$row["ke_sach"])->value('idShelf'),
         ];
         return new BookModel($data);
