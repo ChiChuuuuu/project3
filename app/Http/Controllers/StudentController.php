@@ -53,7 +53,8 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->get('name');
+        try {
+            $name = $request->get('name');
         $phone = $request->get('phone');
         $dob = $request->get('dob');
         $gender = $request->get('gender');
@@ -68,6 +69,9 @@ class StudentController extends Controller
         $student->department = $department;
         $student->idStatus = $status;
         $student->save();
+        } catch (\Throwable $th) {
+            return redirect(route('student.create'))->with('error', 'Số điện thoại bị trùng');
+        }
 
         return redirect(route('student.index'))->with('message', 'Thêm thành công');
     }

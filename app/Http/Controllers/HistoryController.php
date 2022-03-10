@@ -22,17 +22,18 @@ class HistoryController extends Controller
         ->join('student','student.idStudent','borrowed_book.idStudent')
         ->join('staff','staff.id','borrowed_book.id')
         ->join('author','author.idAuthor','book.author')
+        ->where('name','LIKE',"%$search%")
         ->where('status','1')
-        ->where('name','LIKE',"%$search%")->paginate(5);
+        ->paginate(5);
 
         // //Trả
         $history2s = BBookModel::join('book','book.idBook','borrowed_book.idBook')
         ->join('student','student.idStudent','borrowed_book.idStudent')
         ->join('staff','staff.id','borrowed_book.id')
         ->join('author','author.idAuthor','book.author')
-        ->where('status','0')
         ->where('name','LIKE',"%$search2%")
-        ->orWhere('student.idStudent','LIKE',"%$search2%")
+        ->where('status','0')
+        ->orderBy('actualDate','DESC')
         ->paginate(5,['*'],'other_page');
 
 

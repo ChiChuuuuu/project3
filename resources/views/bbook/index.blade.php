@@ -39,7 +39,7 @@
                                         value="{{ Session::get('id') }}" >
                                                 </td>
                                                 <td>
-                                                    <input list="hsinh" id="idStudent" name="idStudent[]" class="form-control" />
+                                                    <input list="hsinh" id="idStudent" name="idStudent[]" class="form-control" required/>
                                                         <datalist id="hsinh">
                                                             @foreach ($student as $student)
                                                                 <option value="{{ $student['idStudent'] }}">{{ $student->idStudent }} | {{ $student->name }} | {{ date('d-m-Y', strtotime($student->dob));
@@ -48,7 +48,7 @@
                                                         </datalist>
                                                 </td>
                                                 <td>
-                                                    <input list="sach" id="book" name="book[]" class="form-control" />
+                                                    <input list="sach" id="book" name="book[]" class="form-control" required/>
                                                     <datalist id="sach">
                                                         @foreach ($book as $book)
                                                             <option value="{{ $book->bookTitle }}">{{ $book->idBook }}</option>

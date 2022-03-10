@@ -44,11 +44,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Số lượng</label>
-                                        <input type="number" class="form-control" name="quantity" required>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label>Ngày xuất bản</label>
                                         <input type="date" class="form-control datepicker" name="publicationDate"  required/>
                                     </div>

@@ -64,7 +64,6 @@ class BookController extends Controller
         $bookTitle = $request->get('bookTitle');
         $category = $request->get('category');
         $language = $request->get('language');
-        $quantity = $request->get('quantity');
         $publicationDate = $request->get('publicationDate');
         $shelf = $request->get('shelf');
         $nameAuthor = $request->get('author');
@@ -73,8 +72,6 @@ class BookController extends Controller
         $author->author = $nameAuthor;
         $author->category = $category;
         $author->language = $language;
-        $author->copiesActual = $quantity;
-        $author->CopiesCurrent = $quantity;
         $author->publicationDate = $publicationDate;
         $author->idShelf = $shelf;
         $author->save();
@@ -119,14 +116,12 @@ class BookController extends Controller
         $bookTitle = $request->get('bookTitle');
         $category = $request->get('category');
         $language = $request->get('language');
-        $quantity = $request->get('quantity');
         $publicationDate = $request->get('publicationDate');
         $nameAuthor = $request->get('author');
         BookModel::where('idBook', $id)->update([
             'bookTitle' => $bookTitle,
             'category' => $category,
             'language' => $language,
-            'copiesActual' => $quantity,
             'publicationDate' => $publicationDate,
             'author' => $nameAuthor,
         ]);

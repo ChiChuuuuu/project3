@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BBookController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RBookController;
@@ -32,9 +33,11 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Dashboard
 Route::middleware([CheckLogin::class])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+
+    //dashboard
+    Route::get('/dashboard',[DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard/export/{month}', [DashboardController::class, 'export'])->name('export-excel');
+    Route::get('/dashboard/exportByYear/{year}', [DashboardController::class, 'exportByYear'])->name('exportByYear');
 
 
     Route::prefix('book')->name('book.')->group(function () {

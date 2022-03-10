@@ -23,7 +23,7 @@ class LoginController extends Controller
             $request->session()->put('id', $staff->id);
             $request->session()->put('username', $staff->username);
             $request->session()->put('isAdmin', $staff->isAdmin);
-            return view('dashboard');
+            return redirect()->route('dashboard');
         } catch (Exception $e) {
             return redirect()->route('login')->with('message', 'Sai ten tai khoan hoac mat khau');
         }
