@@ -26,13 +26,15 @@ class StudentImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnF
     {
 
         $date = str_replace("/", "-", $row["ngay_sinh"]);
+        $date2 = str_replace("/", "-", $row["ngay_het_han"]);
 
         $data = [
             "name" => $row["ho_va_ten"],
             "dob" => date("Y-m-d", strtotime($date)),
-            "department" => $row["chuyen_nganh"],
+            "department" => $row["chu_the"],
             "gender" => $row["gioi_tinh"] == "Nam" ? 0 : 1,
             "phone" => $row["so_dien_thoai"],
+            "expiredDate" => date("Y-m-d", strtotime($date2)),
         ];
         return new StudentModel($data);
     }

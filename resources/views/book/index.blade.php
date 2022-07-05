@@ -1,6 +1,5 @@
 @extends('layout.layout')
 @section('main')
-
     <div class="main-panel">
         <nav class="navbar navbar-default">
             {{-- <div class="container-fluid">
@@ -141,6 +140,7 @@
                                         <th>Thể loại</th>
                                         <th>Ngày phát hành</th>
                                         <th>Ngôn ngữ</th>
+                                        <th>Tủ sách</th>
                                         <th>Hành động</th>
                                     </tr>
                                 </thead>
@@ -153,16 +153,17 @@
                                             <td> {{ $books->nameCategory }} </td>
                                             <td> {{ date('d-m-Y', strtotime($books->publicationDate)) }} </td>
                                             <td> {{ $books->language }} </td>
+                                            <td> {{ $books->shelfNo }} </td>
                                             <td class="td-actions">
                                                 <a href="{{ route('book.edit', ['book' => $books->idBook]) }}"
                                                     rel="tooltip" title="Edit Profile"
                                                     class="btn btn-success btn-simple btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <a href="#" rel="tooltip" title="Remove"
+                                                {{-- <a href="#" rel="tooltip" title="Remove"
                                                     class="btn btn-danger btn-simple btn-xs">
                                                     <i class="fa fa-times"></i>
-                                                </a>
+                                                </a> --}}
                                             </td>
                                         </tr>
                                     @empty
@@ -203,5 +204,4 @@
 
 
         </div>
-
     @endsection

@@ -1,6 +1,5 @@
 @extends('layout.layout')
 @section('main')
-
     <div class="main-panel">
         <nav class="navbar navbar-default">
         </nav>
@@ -38,10 +37,7 @@
                                                     class="btn btn-success btn-simple btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <a href="#" rel="tooltip" title="Remove"
-                                                    class="btn btn-danger btn-simple btn-xs">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
+
                                             </td>
                                         </tr>
                                     @empty
@@ -66,5 +62,4 @@
                 </div>
             </div>
         </div>
-
     @endsection

@@ -67,6 +67,7 @@ class BookController extends Controller
         $publicationDate = $request->get('publicationDate');
         $shelf = $request->get('shelf');
         $nameAuthor = $request->get('author');
+        $quantity = $request->get('quantity');
         $author = new BookModel();
         $author->bookTitle = $bookTitle;
         $author->author = $nameAuthor;
@@ -74,6 +75,7 @@ class BookController extends Controller
         $author->language = $language;
         $author->publicationDate = $publicationDate;
         $author->idShelf = $shelf;
+        $author->quantity = $quantity;
         $author->save();
 
         return redirect(route('book.index'))->with('message', 'Thêm thành công');
@@ -118,12 +120,14 @@ class BookController extends Controller
         $language = $request->get('language');
         $publicationDate = $request->get('publicationDate');
         $nameAuthor = $request->get('author');
+        $quantity = $request->get('quantity');
         BookModel::where('idBook', $id)->update([
             'bookTitle' => $bookTitle,
             'category' => $category,
             'language' => $language,
             'publicationDate' => $publicationDate,
             'author' => $nameAuthor,
+            'quantity' => $quantity
         ]);
         return redirect(route('book.index'))->with('message', 'Sửa thành công');
     }
@@ -152,8 +156,10 @@ class BookController extends Controller
             $name = $students['ten_sach'];
             $dob = $students['the_loai'];
             $department = $students['tac_gia'];
+            $publicationDate = $students['ngay_phat_hanh'];
             $gender = $students['ngon_ngu'];
             $phone = $students['ke_sach'];
+            $quantity = $students['so_luong'];
             // if($name == '' && $dob == '' && $department == '' && $gender == '' && $phone == '' ){
             //     throw new Exception();
             // }

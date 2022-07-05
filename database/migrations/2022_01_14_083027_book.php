@@ -22,8 +22,7 @@ class Book extends Migration
             $table->unsignedBigInteger('author');
             $table->foreign('author')->references('idAuthor')->on('author');
             $table->string('language');
-            $table->integer('copiesActual');
-            $table->integer('copiesCurrent');
+            $table->integer('quantity');
             $table->unsignedBigInteger('idShelf');
             $table->foreign('idShelf')->references('idShelf')->on('shelf');
         });

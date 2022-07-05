@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AuthorModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AuthorController extends Controller
 {
@@ -12,12 +13,17 @@ class AuthorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->get('search');
         $author = AuthorModel::paginate(5);
+        $author = DB::table('author')
+        ->where('nameAuthor', 'LIKE', "%$search%")
+        ->paginate(5);
 
         return view('author.index', [
-            'author' => $author
+            'author' => $author,
+            'search' => $search
         ]);
     }
 
@@ -39,10 +45,15 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        $nameAuthor = $request->get('nameAuthor');
-        $author = new AuthorModel();
-        $author->nameAuthor = $nameAuthor;
-        $author->save();
+
+        try {
+            $nameAuthor = $request->get('nameAuthor');
+            $author = new AuthorModel();
+            $author->nameAuthor = $nameAuthor;
+            $author->save();
+        } catch (\Throwable $th) {
+            return redirect(route('author.index'))->with('danger', 'Đã tồn tại tác giả này');
+        }
 
         return redirect(route('author.index'))->with('message', 'Thêm thành công');
     }

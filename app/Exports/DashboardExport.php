@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\BBookModel;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -10,8 +11,8 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class DashboardExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function __construct($month)
     {
         //Neu flag = true tai xuong sample.xlsx
@@ -20,12 +21,15 @@ class DashboardExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        return BBookModel::join('book','book.idBook','borrowed_book.idBook')
-        ->join('student','student.idStudent','borrowed_book.idStudent')
-        ->join('staff','staff.id','borrowed_book.id')
-        ->join('author','author.idAuthor','book.author')
-        ->whereMonth('fromDate','=',$this->month)
-        ->get();
+        $now = Carbon::now();
+
+        return BBookModel::join('book', 'book.idBook', 'borrowed_book.idBook')
+            ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
+            ->join('staff', 'staff.id', 'borrowed_book.id')
+            ->join('author', 'author.idAuthor', 'book.author')
+            ->whereMonth('fromDate', '=', $this->month)
+            ->whereYear('fromDate', '=', $now)
+            ->get();
     }
 
     public function map($student): array

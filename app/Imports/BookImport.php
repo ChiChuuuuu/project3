@@ -27,12 +27,11 @@ class BookImport implements ToModel, WithHeadingRow
         $data = [
             "bookTitle" => $row["ten_sach"],
             "category" => CategoryModel::where('nameCategory',$row["the_loai"])->value('idCategory'),
-            "publicationDate" => date("Y-m-d", strtotime($date)),
             "author" => AuthorModel::where('nameAuthor',$row["tac_gia"])->value('idAuthor'),
+            "publicationDate" => date("Y-m-d", strtotime($date)),
             "language" => $row["ngon_ngu"],
-            // "copiesActual" => $row["so_luong"],
-            // "copiesCurrent" => $row["so_luong"],
             "idShelf" => ShelfModel::where('shelfNo',$row["ke_sach"])->value('idShelf'),
+            "quantity" => $row["so_luong"],
         ];
         return new BookModel($data);
     }

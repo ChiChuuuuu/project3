@@ -9,13 +9,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class StudentExport implements WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function headings(): array
     {
         return [
-            'Họ và tên',	'Ngày sinh',	'Giới tính',	'Chuyên ngành',	'Số điện thoại'
-
+            'Họ và tên',    'Ngày sinh',    'Giới tính',    'Chủ thể',    'Số điện thoại', 'Ngày hết hạn'
         ];
     }
 }

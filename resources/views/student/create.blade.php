@@ -43,7 +43,7 @@
 
                                         </div> <br>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Chuyên ngành</label>
+                                            <label class="col-sm-2 control-label">Đối tượng</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="department">
                                             </div>
@@ -51,15 +51,24 @@
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Số điện thoại</label>
                                             <div class="col-sm-10">
-                                                <input type="number" class="form-control" name="phone">
+                                                <input type="number" class="form-control" name="phone" >
                                             </div>
                                         </div> <br>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Ngày hết hạn</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" name="expiredDate" value="{{ $mytime->format('Y-m-d') }}">
+                                            </div>
+                                        </div> <br>
+
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Trạng thái </label>
                                             @foreach ($status as $status)
                                                 <div class="radio">
                                                     &nbsp;<input type="radio" name="status" id="{{ $status->idStatus }}"
-                                                        value="{{ $status->idStatus }}">
+                                                        value="{{ $status->idStatus }}"
+                                                        @if ($status->idStatus == 1) checked @endif>
                                                     <label for="{{ $status->idStatus }}">
                                                         {{ $status->status }}
                                                     </label>

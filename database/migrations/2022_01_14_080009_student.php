@@ -20,6 +20,7 @@ class Student extends Migration
             $table->boolean('gender');
             $table->string('department');
             $table->string('phone')->unique();
+            $table->date('expiredDate');
             $table->unsignedBigInteger('idStatus');
             $table->foreign('idStatus')->references('idStatus')->on('student_status');
         });

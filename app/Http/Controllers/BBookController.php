@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BBookModel;
 use App\Models\BookModel;
+use App\Models\ShelfStatusModel;
 use App\Models\StudentModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,12 +21,12 @@ class BBookController extends Controller
     {
         $mytime = Carbon::now();
 
-        $book = BookModel::join('shelf','shelf.idShelf','=','book.idShelf')
-        ->join('shelf_status','shelf_status.idStatus','=','shelf.status')
-        ->where('shelf.status','=',2)
-        ->get();
+        $book = BookModel::join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
+            ->where('shelf.status', '=', 2)
+            ->get();
 
-        $student = StudentModel::where('idStatus','=',1)->get();
+        $student = StudentModel::where('idStatus', '=', 1)->get();
         return view('bbook.index', [
             'book' => $book,
             'mytime' => $mytime,
@@ -33,12 +34,14 @@ class BBookController extends Controller
         ]);
     }
 
-    public function getAllBookById($id){
+    public function getAllBookById($id)
+    {
         $listBook = BookModel::where('idBook', $id)->get();
         return $listBook;
     }
 
-    public function getAllInfoById($id){
+    public function getAllInfoById($id)
+    {
         $listStudent = StudentModel::where('idStudent', $id)->get();
         return $listStudent;
     }
@@ -69,22 +72,54 @@ class BBookController extends Controller
         $dateReturn = $request->get('dateReturn');
         $note = $request->get('note');
 
-        if($dateCurrent > $dateReturn){
-            return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
-        } else {
-            for ($i = 0; $i < count($book); $i++) {
-                $datasave = [
-                    'idBook' => BookModel::where('bookTitle','=',$book[$i])->value('idBook'),
-                    'idStudent' => $idStudent[$i],
-                    'fromDate' => $dateCurrent[$i],
-                    'toDate' => $dateReturn[$i],
-                    'id' => $idStaff[$i],
-                    'note' => $note[$i]
-                ];
-                DB::table('borrowed_book')->insert($datasave);
-            };
-            return redirect(route('book.index'))->with('message', 'Mượn thành công');
+        $bookCheck = BookModel::join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
+            ->where('bookTitle', '=', $book)->get();
+
+        foreach ($bookCheck as $bookCheck) {
+            if ($bookCheck->idStatus == 1) {
+                return redirect(route('bbook.index'))->with('danger', 'Sach khong duoc muon');
+            } else {
+                if ($dateCurrent > $dateReturn) {
+                    return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+                } else {
+                    for ($i = 0; $i < count($book); $i++) {
+
+                        $datasave = [
+                            'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
+                            'idStudent' => $idStudent[$i],
+                            'fromDate' => $dateCurrent[$i],
+                            'toDate' => $dateReturn[$i],
+                            'id' => $idStaff[$i],
+                            'note' => $note[$i]
+                        ];
+                        DB::table('borrowed_book')->insert($datasave);
+                    };
+                    return redirect(route('book.index'))->with('message', 'Mượn thành công');
+                }
+            }
         }
+
+        //SELECT * FROM `book` inner JOIN shelf ON shelf.idShelf = book.idShelf
+        //INNER JOIN shelf_status ON shelf_status.idStatus = shelf.status WHERE bookTitle = 'The Shining'
+
+        // if ($dateCurrent > $dateReturn) {
+        //     return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+        // } else {
+        //     for ($i = 0; $i < count($book); $i++) {
+
+        //         $datasave = [
+        //             'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
+        //             'idStudent' => $idStudent[$i],
+        //             'fromDate' => $dateCurrent[$i],
+        //             'toDate' => $dateReturn[$i],
+        //             'id' => $idStaff[$i],
+        //             'note' => $note[$i]
+        //         ];
+        //         DB::table('borrowed_book')->insert($datasave);
+        //     };
+        //     return redirect(route('book.index'))->with('message', 'Mượn thành công');
+        // }
     }
 
     /**

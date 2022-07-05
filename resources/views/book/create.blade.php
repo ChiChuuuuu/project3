@@ -49,6 +49,11 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label>Số lượng</label>
+                                        <input type="number" class="form-control" name="quantity" required>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>Tủ sách</label>
                                         <select name="shelf" class="selectpicker" data-title="Single Select" required
                                                 data-style="btn-default btn-block" data-menu-style="dropdown-blue">

@@ -16,7 +16,7 @@ class BookExport implements WithHeadings
     public function headings(): array
     {
         return [
-            'Tên sách', 'Thể loại', 'Tác giả',    'Ngày phát hành',    'Ngôn ngữ',    'Kệ sách'
+            'Tên sách', 'Thể loại', 'Tác giả',    'Ngày phát hành',    'Ngôn ngữ',    'Kệ sách', 'Số lượng',
         ];
     }
 }

@@ -1,6 +1,5 @@
 @extends('layout.layout')
 @section('main')
-
     <div class="main-panel">
         <div class="main-content">
             <div>
@@ -34,17 +33,15 @@
                                             <label class="col-sm-2 control-label">Giới tính </label>
 
                                             <div class="radio">
-                                                &nbsp;<input type="radio" name="gender" id="gender" value="0" @if ($student->gender == 0)
-                                                checked
-                                                @endif>
+                                                &nbsp;<input type="radio" name="gender" id="gender" value="0"
+                                                    @if ($student->gender == 0) checked @endif>
                                                 <label for="gender">
                                                     Nam
                                                 </label>
                                             </div>
                                             <div class="radio">
-                                                &nbsp;<input type="radio" name="gender" id="gender1" value="1" @if ($student->gender == 1)
-                                                checked
-                                                @endif>
+                                                &nbsp;<input type="radio" name="gender" id="gender1" value="1"
+                                                    @if ($student->gender == 1) checked @endif>
                                                 <label for="gender1">
                                                     Nữ
                                                 </label>
@@ -66,28 +63,39 @@
                                             </div>
                                         </div> <br>
                                         <div class="form-group">
+                                            <label class="col-sm-2 control-label">Ngày hết hạn</label>
+                                            <div class="col-sm-10">
+                                                <input type="date" class="form-control" name="expiredDate"
+                                                    value="{{ $student->expiredDate }}" />
+                                            </div>
+                                        </div> <br>
+                                        <div class="form-group">
                                             <label class="col-sm-2 control-label">Trạng thái </label>
-                                            @foreach ($status as $status)
-                                                <div class="radio">
-                                                    &nbsp;<input type="radio" name="status" id="{{ $status->idStatus }}"
-                                                        value="{{ $status->idStatus }}" @if ($status->idStatus == $student->idStatus)
-                                                    checked
-                                            @endif>
-                                            <label for="{{ $status->idStatus }}">
-                                                {{ $status->status }}
-                                            </label>
-                                        </div>
-                                        @endforeach
-                            </div> <br>
-                            <button class="btn btn-primary btn-fill ">Thêm</button>
-                            </fieldset>
-                            </form>
 
-                        </div>
-                    </div> <!-- end card -->
+                                            <div class="radio">
+                                                &nbsp;<input type="radio" name="status" id="1" value="1" @if($student->expiredDate > $now) checked="checked" @endif>
+                                                <label for="1">
+                                                    Hoạt động
+                                                </label>
+                                            </div>
+
+                                            <div class="radio">
+                                                &nbsp;<input type="radio" name="status" id="2" value="2" @if($student->expiredDate <= $now) checked="checked" @endif>
+                                                <label for="2">
+                                                    Không hoạt động
+                                                </label>
+                                            </div>
+
+                                        </div> <br>
+                                        <button class="btn btn-primary btn-fill ">Thêm</button>
+                                    </fieldset>
+                                </form>
+
+                            </div>
+                        </div> <!-- end card -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 @endsection

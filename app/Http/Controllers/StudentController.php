@@ -6,6 +6,7 @@ use App\Exports\StudentExport;
 use App\Imports\StudentImport;
 use App\Models\StudentModel;
 use App\Models\StudentStatusModel;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,14 +24,16 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+        $now = Carbon::now();
         $search = $request->get('search');
         $student = DB::table('student')
             ->join('student_status', 'student_status.idStatus', '=', 'student.idStatus')
-            ->where('name','LIKE',"%$search%")
+            ->where('name', 'LIKE', "%$search%")
             ->paginate(5);
         return view('student.index', [
             'student' => $student,
-            'search' => $search
+            'search' => $search,
+            'now' => $now,
         ]);
     }
 
@@ -41,8 +44,14 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $mytime = Carbon::now()->addMonths(6);
+
         $status = StudentStatusModel::all();
-        return view('student.create', ['status' => $status]);
+
+        return view('student.create', [
+            'status' => $status,
+            'mytime' => $mytime
+        ]);
     }
 
     /**
@@ -55,20 +64,22 @@ class StudentController extends Controller
     {
         try {
             $name = $request->get('name');
-        $phone = $request->get('phone');
-        $dob = $request->get('dob');
-        $gender = $request->get('gender');
-        $department = $request->get('department');
-        $status = $request->get('status');
+            $phone = $request->get('phone');
+            $dob = $request->get('dob');
+            $gender = $request->get('gender');
+            $department = $request->get('department');
+            $status = $request->get('status');
+            $expiredDate = $request->get('expiredDate');
 
-        $student = new StudentModel();
-        $student->name = $name;
-        $student->phone = $phone;
-        $student->dob = $dob;
-        $student->gender = $gender;
-        $student->department = $department;
-        $student->idStatus = $status;
-        $student->save();
+            $student = new StudentModel();
+            $student->name = $name;
+            $student->phone = $phone;
+            $student->dob = $dob;
+            $student->gender = $gender;
+            $student->department = $department;
+            $student->idStatus = $status;
+            $student->expiredDate = $expiredDate;
+            $student->save();
         } catch (\Throwable $th) {
             return redirect(route('student.create'))->with('error', 'Số điện thoại bị trùng');
         }
@@ -95,9 +106,10 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
+        $now = Carbon::now();
         $student = StudentModel::find($id);
         $status = StudentStatusModel::all();
-        return view('student.edit', ['status' => $status, 'student' => $student]);
+        return view('student.edit', ['status' => $status, 'student' => $student, 'now' => $now]);
     }
 
     /**
@@ -115,6 +127,7 @@ class StudentController extends Controller
         $gender = $request->get('gender');
         $department = $request->get('department');
         $status = $request->get('status');
+        $expiredDate = $request->get('expiredDate');
 
         StudentModel::where('idStudent', $id)->update([
             'name' => $name,
@@ -123,6 +136,7 @@ class StudentController extends Controller
             'gender' => $gender,
             'department' => $department,
             'idStatus' => $status,
+            'expiredDate' => $expiredDate,
         ]);
 
         return redirect(route('student.index'))->with('message', 'Sửa thành công');
@@ -139,11 +153,13 @@ class StudentController extends Controller
         //
     }
 
-    public function insertByExcel(){
+    public function insertByExcel()
+    {
         return view('student.insert-by-excel');
     }
 
-    public function insertByExcelProcess(Request $request){
+    public function insertByExcelProcess(Request $request)
+    {
 
         $student = Excel::toArray(new StudentImport, $request->file('excel'));
 
@@ -151,9 +167,10 @@ class StudentController extends Controller
             $students = $student[0][0];
             $name = $students['ho_va_ten'];
             $dob = $students['ngay_sinh'];
-            $department = $students['chuyen_nganh'];
+            $department = $students['chu_the'];
             $gender = $students['gioi_tinh'];
             $phone = $students['so_dien_thoai'];
+            $expiredDate = $students['ngay_het_han'];
             // if($name == '' && $dob == '' && $department == '' && $gender == '' && $phone == '' ){
             //     throw new Exception();
             // }
@@ -170,7 +187,6 @@ class StudentController extends Controller
         }
 
         return redirect(route('student.insert-by-excel'))->with('message', 'Thêm thành công');
-
     }
 
     public function export()
@@ -178,15 +194,17 @@ class StudentController extends Controller
         return Excel::download(new StudentExport, 'student.xlsx');
     }
 
-    public function wordExport($id){
+    public function wordExport($id)
+    {
         $user = StudentModel::findOrFail($id);
         $templateProcessor = new TemplateProcessor('word-template/user.docx');
-        $templateProcessor->setValue('idStudent',$user->idStudent);
-        $templateProcessor->setValue('name',$user->name);
-        $templateProcessor->setValue('dob',date('d-m-Y', strtotime($user->dob)));
-        $templateProcessor->setValue('department',$user->department);
+        $templateProcessor->setValue('idStudent', $user->idStudent);
+        $templateProcessor->setValue('name', $user->name);
+        $templateProcessor->setValue('dob', date('d-m-Y', strtotime($user->dob)));
+        $templateProcessor->setValue('department', $user->department);
+        $templateProcessor->setValue('expiredDate', date('d-m-Y', strtotime($user->expiredDate)));
         $fileName = $user->name;
-        $templateProcessor->saveAs($fileName.'.docx');
-        return response()->download($fileName.'.docx')->deleteFileAfterSend(true);
+        $templateProcessor->saveAs($fileName . '.docx');
+        return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
     }
 }

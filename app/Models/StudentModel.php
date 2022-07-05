@@ -13,7 +13,7 @@ class StudentModel extends Model
 
     protected $primaryKey = 'idStudent';
 
-    protected $fillable = ["name","dob","gender","department","phone","idStatus"];
+    protected $fillable = ["name","dob","gender","department","phone","idStatus","expiredDate"];
 
     public $timestamps = false;
 }

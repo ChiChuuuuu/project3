@@ -1,6 +1,5 @@
 @extends('layout.layout')
 @section('main')
-
     <div class="main-panel">
         <nav class="navbar navbar-default">
         </nav>
@@ -31,6 +30,7 @@
                                         <th>Giới tính</th>
                                         <th>Chuyên ngành</th>
                                         <th>Số điện thoại</th>
+                                        <th>Ngày hết hạn</th>
                                         <th>Trạng thái</th>
                                         <th>In thẻ</th>
                                         <th>Hành động</th>
@@ -51,15 +51,19 @@
                                             </td>
                                             <td> {{ $students->department }} </td>
                                             <td> {{ $students->phone }} </td>
+                                            <td> {{ date('d-m-Y', strtotime($students->expiredDate)) }} </td>
                                             <td>
                                                 @if ($students->idStatus == 2)
                                                     <div style="color: red"> {{ $students->status }} </div>
+                                                @elseif ($now >= $students->expiredDate)
+                                                    <div style="color: red"> Không hoạt động </div>
                                                 @else
                                                     <div style="color: blue"> {{ $students->status }}
                                                     </div>
                                                 @endif
                                             </td>
-                                            <td><a href="{{ url('/student/word-export',[$students->idStudent])}}">In thẻ</a></td>
+                                            <td><a href="{{ url('/student/word-export', [$students->idStudent]) }}">In
+                                                    thẻ</a></td>
                                             <td class="td-actions">
                                                 <a href="{{ route('student.edit', ['student' => $students->idStudent]) }}"
                                                     rel="tooltip" title="Edit Profile"
@@ -91,8 +95,8 @@
                     class="btn btn-primary btn-fill btn-wd">Thêm</button></a>
             <a href="{{ route('student.insert-by-excel') }}"><button type="button"
                     class="btn btn-primary btn-fill btn-wd">Thêm bằng excel</button></a>
-            <a href="{{ route('student.export-excel') }}"><button type="button" class="btn btn-primary btn-fill btn-wd">Tải
+            <a href="{{ route('student.export-excel') }}"><button type="button"
+                    class="btn btn-primary btn-fill btn-wd">Tải
                     file excel mẫu</button></a>
         </div>
-
     @endsection

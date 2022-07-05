@@ -1,6 +1,5 @@
 @extends('layout.layout')
 @section('main')
-
     <div class="main-panel">
         <nav class="navbar navbar-default">
         </nav>
@@ -17,7 +16,8 @@
                         <form class="navbar-form navbar-left navbar-search-form" role="search">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                                <input type="text" value="" class="form-control" placeholder="Search...">
+                                <input type="text" name="search" value="{{ $search }}" class="form-control"
+                                    placeholder="Search...">
                             </div>
                         </form>
                         <div class="content table-responsive table-full-width">
@@ -39,10 +39,6 @@
                                                     class="btn btn-success btn-simple btn-xs">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <a href="#" rel="tooltip" title="Remove"
-                                                    class="btn btn-danger btn-simple btn-xs">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
                                             </td>
                                         </tr>
                                     @empty
@@ -52,13 +48,21 @@
                             </table>
 
                         </div>
-                        {{ $author->links('pagination::bootstrap-4') }}
+                        {{ $author->appends(['search' => $search])->links('pagination::bootstrap-4') }}
                     </div>
+
                     @if (session()->has('message'))
                         <div class="alert alert-success">
                             {{ session()->get('message') }}
                         </div>
                     @endif
+
+                    @if (session()->has('danger'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('danger') }}
+                        </div>
+                    @endif
+
                     <a href="{{ route('author.create') }}"><button type="button"
                             class="btn btn-primary btn-fill btn-wd">Thêm tác giả</button></a>
                 </div>
@@ -66,5 +70,4 @@
 
 
         </div>
-
     @endsection
