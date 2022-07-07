@@ -67,29 +67,41 @@
                                             <div class="col-sm-10">
                                                 <input type="date" class="form-control" name="expiredDate"
                                                     value="{{ $student->expiredDate }}" />
+                                                @if ($student->expiredDate < $now)
+                                                    <div style="color: red">Ngày hết hạn không được nhỏ hơn ngày hiện tại
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div> <br>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Trạng thái </label>
 
                                             <div class="radio">
-                                                &nbsp;<input type="radio" name="status" id="1" value="1" @if($student->expiredDate > $now) checked="checked" @endif>
+                                                &nbsp;<input type="radio" name="status" id="1" value="1"
+                                                    @if ($student->expiredDate > $now) checked="checked" @endif>
                                                 <label for="1">
                                                     Hoạt động
                                                 </label>
                                             </div>
 
                                             <div class="radio">
-                                                &nbsp;<input type="radio" name="status" id="2" value="2" @if($student->expiredDate <= $now) checked="checked" @endif>
+                                                &nbsp;<input type="radio" name="status" id="2" value="2"
+                                                    @if ($student->expiredDate <= $now) checked="checked" @endif>
                                                 <label for="2">
                                                     Không hoạt động
                                                 </label>
                                             </div>
-
+                                            @if (session()->has('danger'))
+                                            <div class="alert alert-danger">
+                                                {{ session()->get('danger') }}
+                                            </div>
+                                        @endif
                                         </div> <br>
-                                        <button class="btn btn-primary btn-fill ">Thêm</button>
+                                        <button class="btn btn-primary btn-fill ">Update</button>
                                     </fieldset>
                                 </form>
+
+
 
                             </div>
                         </div> <!-- end card -->

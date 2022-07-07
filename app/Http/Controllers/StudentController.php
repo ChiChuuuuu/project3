@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
@@ -121,6 +122,9 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $now = Carbon::now();
+
         $name = $request->get('name');
         $phone = $request->get('phone');
         $dob = $request->get('dob');
@@ -129,17 +133,21 @@ class StudentController extends Controller
         $status = $request->get('status');
         $expiredDate = $request->get('expiredDate');
 
-        StudentModel::where('idStudent', $id)->update([
-            'name' => $name,
-            'phone' => $phone,
-            'dob' => $dob,
-            'gender' => $gender,
-            'department' => $department,
-            'idStatus' => $status,
-            'expiredDate' => $expiredDate,
-        ]);
+        if ($expiredDate < $now) {
+            return Redirect::back()->with('danger', 'Ngày hết hạn không được nhỏ hơn ngày hiện tại');
+        } else {
+            StudentModel::where('idStudent', $id)->update([
+                'name' => $name,
+                'phone' => $phone,
+                'dob' => $dob,
+                'gender' => $gender,
+                'department' => $department,
+                'idStatus' => $status,
+                'expiredDate' => $expiredDate,
+            ]);
 
-        return redirect(route('student.index'))->with('message', 'Sửa thành công');
+            return redirect(route('student.index'))->with('message', 'Sửa thành công');
+        }
     }
 
     /**

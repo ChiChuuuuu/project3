@@ -94,7 +94,25 @@ class BBookController extends Controller
                             'note' => $note[$i]
                         ];
                         DB::table('borrowed_book')->insert($datasave);
-                    };
+
+                        $quantity = BookModel::where('bookTitle', '=', $book[$i])->value('quantity');
+
+                        if ($quantity == 0) {
+                            return redirect(route('bbook.index'))->with('danger', 'Không còn đủ số lượng sách cho mượn');
+                        } else {
+                            try {
+                                $iddata = BookModel::where('bookTitle', '=', $book[$i])->value('idBook');
+                                $dataupdate = [
+                                    'quantity' => $quantity - 1
+                                ];
+
+                                DB::table('book')->where('idBook', '=', $iddata)->update($dataupdate);
+                            } catch (\Throwable $th) {
+                                return redirect(route('bbook.index'))->with('danger', 'Sai roi');
+                            }
+                        }
+                    }
+
                     return redirect(route('book.index'))->with('message', 'Mượn thành công');
                 }
             }
