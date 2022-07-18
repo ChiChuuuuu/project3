@@ -105,6 +105,105 @@
 
                     </div>
 
+
+                    <div class="container-fluid">
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title text-center">Sách được mượn nhiều trong ngày
+                                        {{ date('d-m', strtotime($now)) }} </h4>
+                                </div>
+
+                                <div class="content table-responsive table-full-width">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tên sách</th>
+                                                <th>Số lần mượn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($mostBorrowedDay as $mostBorrowedDay)
+                                                <tr>
+                                                    <td>
+                                                        {{ $mostBorrowedDay->bookTitle }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $mostBorrowedDay->NoOfTimesBorrowed }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title text-center">Sách được mượn nhiều trong tháng
+                                        {{ date('m', strtotime($now)) }} </h4>
+                                </div>
+
+                                <div class="content table-responsive table-full-width">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tên sách</th>
+                                                <th>Số lần mượn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($mostBorrowedBook as $mostBorrowedBook)
+                                                <tr>
+                                                    <td>
+                                                        {{ $mostBorrowedBook->bookTitle }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $mostBorrowedBook->NoOfTimesBorrowed }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title text-center">Sách được mượn nhiều trong năm
+                                        {{ date('Y', strtotime($now)) }} </h4>
+                                </div>
+
+                                <div class="content table-responsive table-full-width">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tên sách</th>
+                                                <th>Số lần mượn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($mostBorrowedYear as $mostBorrowedYear)
+                                                <tr>
+                                                    <td>
+                                                        {{ $mostBorrowedYear->bookTitle }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $mostBorrowedYear->NoOfTimesBorrowed }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="container-fluid">
                         <div class="col-sm-4">
                             <div class="card">
@@ -127,7 +226,8 @@
                                                         Tháng {{ $period->Month }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('/dashboard/export',$period->Month ) }}">Tải xuống</a>
+                                                        <a href="{{ url('/dashboard/export', $period->Month) }}">Tải
+                                                            xuống</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -136,9 +236,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="container-fluid">
                         <div class="col-sm-4">
                             <div class="card">
                                 <div class="header">
@@ -160,7 +258,8 @@
                                                         {{ $period->Year }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('/dashboard/exportByYear',$period->Year ) }}">Tải xuống</a>
+                                                        <a href="{{ url('/dashboard/exportByYear', $period->Year) }}">Tải
+                                                            xuống</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -173,8 +272,6 @@
                 </div>
             </div>
         </div>
-
-
 
     </div>
     </div>

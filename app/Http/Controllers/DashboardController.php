@@ -41,6 +41,31 @@ class DashboardController extends Controller
             ->where('status', '1')
             ->get();
 
+        $mostBorrowedBook = DB::table('book')->select(DB::raw('book.idBook, book.bookTitle, COUNT(borrowed_book.idBB) AS NoOfTimesBorrowed'))
+        ->leftJoin('borrowed_book','book.idBook','borrowed_book.idBook')
+        ->groupBy('book.idBook','book.bookTitle')
+        ->orderBy('NoOfTimesBorrowed','DESC')
+        ->whereMonth('fromDate', $now)
+        ->limit(5)->get();
+
+        $mostBorrowedDay = DB::table('book')->select(DB::raw('book.idBook, book.bookTitle, COUNT(borrowed_book.idBB) AS NoOfTimesBorrowed'))
+        ->leftJoin('borrowed_book','book.idBook','borrowed_book.idBook')
+        ->groupBy('book.idBook','book.bookTitle')
+        ->orderBy('NoOfTimesBorrowed','DESC')
+        ->whereDate('fromDate', $now)
+        ->limit(5)->get();
+
+        $mostBorrowedYear = DB::table('book')->select(DB::raw('book.idBook, book.bookTitle, COUNT(borrowed_book.idBB) AS NoOfTimesBorrowed'))
+        ->leftJoin('borrowed_book','book.idBook','borrowed_book.idBook')
+        ->groupBy('book.idBook','book.bookTitle')
+        ->orderBy('NoOfTimesBorrowed','DESC')
+        ->whereYear('fromDate', $now)
+        ->limit(5)->get();
+
+        //SELECT book.idBook, book.bookTitle, COUNT(borrowed_book.idBB)
+        //AS NoOfTimesBorrowed FROM book LEFT JOIN borrowed_book ON book.idBook = borrowed_book.idBook
+        //GROUP BY book.idBook ORDER BY NoOfTimesBorrowed DESC LIMIT 5
+
 
         return view('dashboard', [
             'historys' => $historys,
@@ -51,14 +76,19 @@ class DashboardController extends Controller
             'bookByYear' => $bookByYear,
             'period' => $period,
             'year' => $year,
+            'mostBorrowedBook' => $mostBorrowedBook,
+            'mostBorrowedDay' => $mostBorrowedDay,
+            'mostBorrowedYear' => $mostBorrowedYear,
         ]);
     }
 
-    public function export(Request $request, $month){
-        return Excel::download(new DashboardExport($month),'Danh sach.xlsx');
+    public function export(Request $request, $month)
+    {
+        return Excel::download(new DashboardExport($month), 'Danh sach.xlsx');
     }
 
-    public function exportByYear(Request $request, $year){
-        return Excel::download(new DashboardExport2($year),'Danh sach nam.xlsx');
+    public function exportByYear(Request $request, $year)
+    {
+        return Excel::download(new DashboardExport2($year), 'Danh sach nam.xlsx');
     }
 }
