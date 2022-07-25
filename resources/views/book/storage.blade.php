@@ -138,10 +138,7 @@
                                         <th>Tên sách</th>
                                         <th>Tác giả</th>
                                         <th>Thể loại</th>
-                                        <th>Ngày phát hành</th>
-                                        <th>Ngôn ngữ</th>
-                                        <th>Tủ sách</th>
-                                        <th>Hành động</th>
+                                        <th>Số lượng</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -151,20 +148,14 @@
                                             <td> {{ $books->bookTitle }} </td>
                                             <td> {{ $books->nameAuthor }} </td>
                                             <td> {{ $books->nameCategory }} </td>
-                                            <td> {{ date('d-m-Y', strtotime($books->publicationDate)) }} </td>
-                                            <td> {{ $books->language }} </td>
-                                            <td> {{ $books->shelfNo }} </td>
-                                            <td class="td-actions">
-                                                <a href="{{ route('book.edit', ['book' => $books->idBook]) }}"
-                                                    rel="tooltip" title="Edit Profile"
-                                                    class="btn btn-success btn-simple btn-xs">
-                                                    <i class="fa fa-edit fa-lg"></i>
-                                                </a>
-                                                <a href="{{ url('/add-image', ['book' => $books->idBook]) }}" rel="tooltip" title="Add Image"
-                                                    class="btn btn-danger btn-simple btn-xs">
-                                                    <i class="fa fa-image fa-lg"></i>
-                                                </a>
+                                            <td>
+                                                @if ($books->quantity == 0)
+                                                    <div style="color: red"> {{ $books->quantity }} </div>
+                                                @else
+                                                    <div style="color: rgb(0, 119, 255)"> {{ $books->quantity }} </div>
+                                                @endif
                                             </td>
+
                                         </tr>
                                     @empty
                                         <tr>
@@ -181,23 +172,19 @@
 
                         {{ $book->appends(['search' => $search])->links('pagination::bootstrap-4') }}
 
+
+
                     </div>
+
+                    <a href="{{ route('bbook.createBB') }}"><button type="button"
+                            class="btn btn-primary btn-fill btn-wd">Mượn sách</button></a>
+
                     @if (session()->has('message'))
                         <div class="alert alert-success">
                             {{ session()->get('message') }}
                         </div>
                     @endif
 
-                    @if (Session::get('isAdmin') == 0)
-                    @else
-                        <a href="{{ route('book.create') }}"><button type="button"
-                                class="btn btn-primary btn-fill btn-wd">Thêm sách</button></a>
-
-                        <a href="{{ route('book.insert-by-excel') }}"><button type="button"
-                                class="btn btn-primary btn-fill btn-wd">Thêm sách = excel</button></a>
-                        <a href="{{ route('book.export-excel') }}"><button type="button"
-                                class="btn btn-primary btn-fill btn-wd">Tải file excel mẫu</button></a>
-                    @endif
 
                 </div>
             </div>

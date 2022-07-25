@@ -62,6 +62,7 @@
                                         <input type="date" class="form-control datepicker" name="publicationDate" value="{{ $book->publicationDate }}"/>
                                     </div>
 
+
                                     <button type="submit" class="btn btn-fill btn-info">Sửa</button>
                                 </form>
                             </div>

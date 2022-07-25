@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         $bookByDay = BBookModel::whereDay('fromDate', '=', $now)->get();
 
-        $bookNotReturn = BBookModel::where('actualDate', '=', NULL)->get();
+        $bookNotReturn = BBookModel::where('actualDate', '=', NULL)->where('status',1)->get();
 
         $bookByYear = BBookModel::whereYear('fromDate', '=', $now);
 
@@ -66,6 +66,14 @@ class DashboardController extends Controller
         //AS NoOfTimesBorrowed FROM book LEFT JOIN borrowed_book ON book.idBook = borrowed_book.idBook
         //GROUP BY book.idBook ORDER BY NoOfTimesBorrowed DESC LIMIT 5
 
+        $expDate = Carbon::now()->addDays(45);
+
+        $lostBook = BBookModel::join('book', 'book.idBook', 'borrowed_book.idBook')
+        ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
+        ->join('staff', 'staff.id', 'borrowed_book.id')
+        ->join('author', 'author.idAuthor', 'book.author')
+        ->where('status', '3')
+        ->paginate(5);
 
         return view('dashboard', [
             'historys' => $historys,
@@ -79,6 +87,8 @@ class DashboardController extends Controller
             'mostBorrowedBook' => $mostBorrowedBook,
             'mostBorrowedDay' => $mostBorrowedDay,
             'mostBorrowedYear' => $mostBorrowedYear,
+            'lostBook' => $lostBook,
+            'expDate' => $expDate,
         ]);
     }
 
@@ -91,4 +101,13 @@ class DashboardController extends Controller
     {
         return Excel::download(new DashboardExport2($year), 'Danh sach nam.xlsx');
     }
+
+    public function lostBook(Request $request,$idBB,$status){
+        BBookModel::where('idBB', $idBB)->update([
+            'status' => $status,
+        ]);
+
+        return redirect(url('/dashboard'));
+    }
+
 }

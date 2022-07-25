@@ -8,6 +8,7 @@ use App\Models\AuthorModel;
 use App\Models\BookModel;
 use App\Models\CategoryModel;
 use App\Models\ShelfModel;
+use App\Models\StudentModel;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,8 +28,8 @@ class BookController extends Controller
             ->join('author', 'idAuthor', '=', 'book.author')
             ->join('category', 'idCategory', '=', 'book.category')
             ->join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
-            ->where('bookTitle','LIKE',"%$search%")
-            ->orWhere('nameAuthor','LIKE',"%$search%")
+            ->where('bookTitle', 'LIKE', "%$search%")
+            ->orWhere('nameAuthor', 'LIKE', "%$search%")
             ->paginate(5);
         return view('book.index', [
             'book' => $book,
@@ -61,6 +62,8 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $bookTitle = $request->get('bookTitle');
         $category = $request->get('category');
         $language = $request->get('language');
@@ -68,6 +71,12 @@ class BookController extends Controller
         $shelf = $request->get('shelf');
         $nameAuthor = $request->get('author');
         $quantity = $request->get('quantity');
+
+        $image = $request->file('image');
+        $destination_path = 'public/images/book';
+        $image_name = $image->getClientOriginalName();
+        $path = $image->storeAs($destination_path, $image_name);
+
         $author = new BookModel();
         $author->bookTitle = $bookTitle;
         $author->author = $nameAuthor;
@@ -76,6 +85,7 @@ class BookController extends Controller
         $author->publicationDate = $publicationDate;
         $author->idShelf = $shelf;
         $author->quantity = $quantity;
+        $author->image = $image_name;
         $author->save();
 
         return redirect(route('book.index'))->with('message', 'Thêm thành công');
@@ -143,11 +153,13 @@ class BookController extends Controller
         //
     }
 
-    public function insertByExcel(){
+    public function insertByExcel()
+    {
         return view('book.insert-by-excel');
     }
 
-    public function insertByExcelProcess(Request $request){
+    public function insertByExcelProcess(Request $request)
+    {
 
         $book = Excel::toArray(new BookImport, $request->file('excel'));
 
@@ -172,11 +184,50 @@ class BookController extends Controller
         $import->import($file);
 
         return redirect(route('book.insert-by-excel'))->with('message', 'Thêm thành công');
-
     }
 
     public function export()
     {
         return Excel::download(new BookExport, 'book.xlsx');
     }
+
+    public function addImage($idBook)
+    {
+        return view('book.addImage', [
+            'idBook' => $idBook
+        ]);
+    }
+
+    public function saveImage(Request $request)
+    {
+        $image = $request->file('image');
+        $idBook = $request->get('idBook');
+        $destination_path = 'public/images/book';
+        $image_name = $image->getClientOriginalName();
+        $path = $image->storeAs($destination_path, $image_name);
+
+
+        BookModel::where('idBook', $idBook)->update([
+            'image' => $image_name,
+        ]);
+
+        return redirect(route('book.index'))->with('message', 'Thêm ảnh thành công');
+    }
+
+    public function storage(Request $request){
+        $search = $request->get('search');
+        $book = DB::table('book')
+            ->join('author', 'idAuthor', '=', 'book.author')
+            ->join('category', 'idCategory', '=', 'book.category')
+            ->join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->where('bookTitle', 'LIKE', "%$search%")
+            ->orWhere('nameAuthor', 'LIKE', "%$search%")
+            ->paginate(5);
+        return view('book.storage',[
+            'search' => $search,
+            'book' => $book,
+        ]);
+    }
+
+
 }

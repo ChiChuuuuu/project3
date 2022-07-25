@@ -148,6 +148,19 @@
                     </li>
                 @endif
 
+                <li>
+                    <a href="{{ route('bbook.standby') }}">
+                        <i class="pe-7s-graph1"></i>
+                        <p>Sách mượn online</p>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('book.storage') }}">
+                        <i class="pe-7s-graph1"></i>
+                        <p>Kho</p>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -214,6 +227,8 @@
 
 <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
 <script src="{{ asset('assets') }}/js/demo.js"></script>
+
+<script src="{{ asset('assets') }}/js/demo-select.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {

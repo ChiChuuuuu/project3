@@ -70,25 +70,32 @@
 
                                         @forelse ($historys as $history)
                                             @if ($history->toDate <= $now)
-                                                <tr>
-                                                    <td> </td>
-                                                    <td> {{ $history->bookTitle }} </td>
-                                                    <td> {{ $history->nameAuthor }} </td>
-                                                    <td> {{ $history->name }} |
-                                                        {{ date('d-m-Y', strtotime($history->dob)) }} |
-                                                        {{ $history->phone }}
-                                                    </td>
-                                                    <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
-                                                    </td>
-                                                    <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
-                                                    </td>
-                                                    <td> {{ $history->note }} </td>
-                                                    <td> {{ $history->username }} </td>
-                                                    <td>
-                                                        Đã quá hạn
-                                                        {{ $now->diffInDays($history->toDate) }} ngày
-                                                    </td>
-                                                </tr>
+                                                <form method="GET"
+                                                    action="{{ url('/lostBook', [$history->idBB, '3']) }}">
+                                                    <tr>
+                                                        <td> </td>
+                                                        <td> {{ $history->bookTitle }} </td>
+                                                        <td> {{ $history->nameAuthor }} </td>
+                                                        <td> {{ $history->name }} |
+                                                            {{ date('d-m-Y', strtotime($history->dob)) }} |
+                                                            {{ $history->phone }}
+                                                        </td>
+                                                        <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                                        </td>
+                                                        <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                                        </td>
+                                                        <td> {{ $history->note }} </td>
+                                                        <td> {{ $history->username }} </td>
+                                                        <td>
+                                                            Đã quá hạn
+                                                            {{ $now->diffInDays($history->toDate) }} ngày
+                                                        </td>
+                                                        <td><Button rel="tooltip"
+                                                            class="btn btn-danger btn-xs-xl6">
+                                                            Sách đã mất
+                                                        </Button></td>
+                                                    </tr>
+                                                </form>
                                             @endif
 
                                         @empty
@@ -155,6 +162,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
                                             @foreach ($mostBorrowedBook as $mostBorrowedBook)
                                                 <tr>
                                                     <td>
@@ -268,6 +276,64 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="container-fluid">
+
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Sách đã mất</h4>
+                            </div>
+
+                            <div class="content table-responsive table-full-width">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">#</th>
+                                            <th>Tên sách</th>
+                                            <th>Tác giả</th>
+                                            <th>Người mượn</th>
+                                            <th>Ngày mượn</th>
+                                            <th>Ngày hẹn trả sách</th>
+                                            <th>Ghi chú</th>
+                                            <th>Thủ thư cho mượn</th>
+                                            <th>Tình trạng</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @forelse ($lostBook as $history)
+                                                <tr>
+                                                    <td> </td>
+                                                    <td> {{ $history->bookTitle }} </td>
+                                                    <td> {{ $history->nameAuthor }} </td>
+                                                    <td> {{ $history->name }} |
+                                                        {{ date('d-m-Y', strtotime($history->dob)) }} |
+                                                        {{ $history->phone }}
+                                                    </td>
+                                                    <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                                    </td>
+                                                    <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                                    </td>
+                                                    <td> {{ $history->note }} </td>
+                                                    <td> {{ $history->username }} </td>
+                                                    <td>
+                                                        <div style='color:red;'>Sách đã mất</div>
+                                                    </td>
+                                                </tr>
+                                        @empty
+                                            <tr>
+                                                <th></th>
+                                                <th>Khong co du lieu</th>
+                                            </tr>
+                                        @endforelse
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>

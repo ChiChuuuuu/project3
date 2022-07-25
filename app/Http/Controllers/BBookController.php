@@ -85,21 +85,21 @@ class BBookController extends Controller
                 } else {
                     for ($i = 0; $i < count($book); $i++) {
 
-                        $datasave = [
-                            'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
-                            'idStudent' => $idStudent[$i],
-                            'fromDate' => $dateCurrent[$i],
-                            'toDate' => $dateReturn[$i],
-                            'id' => $idStaff[$i],
-                            'note' => $note[$i]
-                        ];
-                        DB::table('borrowed_book')->insert($datasave);
-
                         $quantity = BookModel::where('bookTitle', '=', $book[$i])->value('quantity');
 
                         if ($quantity == 0) {
                             return redirect(route('bbook.index'))->with('danger', 'Không còn đủ số lượng sách cho mượn');
                         } else {
+                            $datasave = [
+                                'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
+                                'idStudent' => $idStudent[$i],
+                                'fromDate' => $dateCurrent[$i],
+                                'toDate' => $dateReturn[$i],
+                                'id' => $idStaff[$i],
+                                'note' => $note[$i]
+                            ];
+                            DB::table('borrowed_book')->insert($datasave);
+
                             try {
                                 $iddata = BookModel::where('bookTitle', '=', $book[$i])->value('idBook');
                                 $dataupdate = [
@@ -183,5 +183,132 @@ class BBookController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function createBB()
+    {
+        $now = Carbon::now();
+        $student = StudentModel::all();
+        $book = BookModel::join('author', 'idAuthor', '=', 'book.author')
+            ->join('category', 'idCategory', '=', 'book.category')
+            ->join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
+            ->where('shelf_status.idStatus', 2)
+            ->get();
+
+        return view('bbook.createBB', [
+            "student" => $student,
+            "book" => $book,
+            "now" => $now,
+        ]);
+    }
+
+    public function getStudentById($id)
+    {
+        $listStudent = StudentModel::where('idStudent', $id)->get();
+
+        return $listStudent;
+    }
+
+    public function getBookById($id)
+    {
+        $listBook = BookModel::join('author', 'idAuthor', '=', 'book.author')
+            ->join('category', 'idCategory', '=', 'book.category')
+            ->join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
+            ->where('idBook', $id)
+            ->where('shelf_status.idStatus', 2)
+            ->get();
+        return $listBook;
+    }
+
+    public function saveBB(Request $request)
+    {
+
+        $idStaff = $request->get('idStaff');
+        $idStudent = $request->get('idStudent');
+        $book = $request->get('book');
+        $dateCurrent = $request->get('dateCurrent');
+        $dateReturn = $request->get('dateReturn');
+        $note = $request->get('note');
+
+
+
+        $bookCheck = BookModel::join('shelf', 'shelf.idShelf', '=', 'book.idShelf')
+            ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
+            ->where('idBook', '=', $book)->get();
+
+        foreach ($bookCheck as $bookCheck) {
+            if ($bookCheck->idStatus == 1) {
+                return redirect(route('bbook.createBB'))->with('danger', 'Sach khong duoc muon');
+            }
+            if ($dateCurrent > $dateReturn) {
+                return redirect(route('bbook.createBB'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+            } else {
+
+                $quantity = BookModel::where('idBook', '=', $book)->value('quantity');
+
+                if ($quantity == 0) {
+                    return redirect(route('bbook.createBB'))->with('danger', 'Không còn đủ số lượng sách cho mượn');
+                } else {
+                    $bookModel = new BBookModel();
+                    $bookModel->idBook = $book;
+                    $bookModel->idStudent = $idStudent;
+                    $bookModel->fromDate = $dateCurrent;
+                    $bookModel->toDate = $dateReturn;
+                    $bookModel->id = $idStaff;
+                    $bookModel->note = $note;
+                    $bookModel->save();
+
+                    try {
+                        $dataupdate = [
+                            'quantity' => $quantity - 1
+                        ];
+
+                        DB::table('book')->where('idBook', '=', $book)->update($dataupdate);
+                    } catch (\Throwable $th) {
+                        return redirect(route('bbook.createBB'))->with('danger', 'Sai roi');
+                    }
+                }
+            }
+
+            return redirect(route('bbook.createBB'))->with('message', 'Mượn thành công');
+        }
+    }
+
+    public function standby(Request $request)
+    {
+        $search = $request->get('search');
+        $now = Carbon::now();
+        $book = BBookModel::join('book', 'book.idBook', 'borrowed_book.idBook')
+            ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
+            ->join('author', 'author.idAuthor', 'book.author')
+            ->where('borrowed_book.status', '=', 2)
+            ->where('name', 'LIKE', "%$search%")
+            ->paginate(5);
+
+        return view('bbook.standby', [
+            'search' => $search,
+            'book' => $book,
+        ]);
+    }
+
+    public function standbyStatus(Request $request, $idBB, $status)
+    {
+        $mytime = Carbon::now();
+        $note = $request->get('note');
+
+        BBookModel::where('idBB', $idBB)->update([
+            'note' => $note,
+            'status' => $status,
+            'id' => 1
+        ]);
+
+        BookModel::join('borrowed_book', 'borrowed_book.idBook', '=', 'book.idBook')
+            ->where('borrowed_book.idBB', '=', $idBB)->update([
+                'quantity' => DB::raw('quantity - 1')
+            ]);
+
+        return redirect(route('history.index'))->with('message', 'Mượn thành công');
     }
 }

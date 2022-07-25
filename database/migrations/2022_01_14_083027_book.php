@@ -24,6 +24,7 @@ class Book extends Migration
             $table->string('language');
             $table->integer('quantity');
             $table->unsignedBigInteger('idShelf');
+            $table->string('image')->nullable();
             $table->foreign('idShelf')->references('idShelf')->on('shelf');
         });
     }

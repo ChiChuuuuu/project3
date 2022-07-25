@@ -28,7 +28,7 @@
                                         <th>Họ và tên</th>
                                         <th>Ngày sinh</th>
                                         <th>Giới tính</th>
-                                        <th>Chuyên ngành</th>
+                                        <th>Đối tượng</th>
                                         <th>Số điện thoại</th>
                                         <th>Ngày hết hạn</th>
                                         <th>Trạng thái</th>

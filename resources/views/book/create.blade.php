@@ -11,7 +11,7 @@
                                 <legend>Thêm sách</legend>
                             </div>
                             <div class="content">
-                                <form action="{{ route('book.store') }}" method="post" enctype="multipart/form">
+                                <form action="{{ route('book.store') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label>Tên sách</label>
@@ -61,6 +61,11 @@
                                                 <option value="{{ $shelf->idShelf }}">{{ $shelf->shelfNo }}</option>
                                                 @endforeach
                                             </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Hình ảnh</label>
+                                        <input type="file" class="form-control" name="image" accept="image/jpeg,image/gif,image/png,application/pdf">
                                     </div>
 
                                     <button type="submit" class="btn btn-fill btn-info">Thêm</button>
