@@ -6,6 +6,8 @@ use App\Exports\DashboardExport;
 use App\Exports\DashboardExport2;
 use App\Models\BBookModel;
 use App\Models\BookModel;
+use App\Models\ChargeModel;
+use App\Models\StudentModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +77,13 @@ class DashboardController extends Controller
         ->where('status', '3')
         ->paginate(5);
 
+        $extendCard = StudentModel::whereNotNull('lastUpdated')->orderBy('lastUpdated','desc')->limit(5)->get();
+
+        $charge = ChargeModel::join('borrowed_book', 'borrowed_book.idBB','charge.idBB')
+        ->join('book', 'book.idBook', 'borrowed_book.idBook')
+        ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
+        ->get();
+
         return view('dashboard', [
             'historys' => $historys,
             'now' => $now,
@@ -89,6 +98,8 @@ class DashboardController extends Controller
             'mostBorrowedYear' => $mostBorrowedYear,
             'lostBook' => $lostBook,
             'expDate' => $expDate,
+            'extendCard' => $extendCard,
+            'charge' => $charge,
         ]);
     }
 

@@ -215,4 +215,19 @@ class StudentController extends Controller
         $templateProcessor->saveAs($fileName . '.docx');
         return response()->download($fileName . '.docx')->deleteFileAfterSend(true);
     }
+
+    public function extendCard(Request $request)
+    {
+        $idStudent = $request->get('idStudent');
+        $extendDate = Carbon::now()->addMonths(3);
+        $now = Carbon::now();
+
+        StudentModel::where('idStudent', $idStudent)->update([
+            'expiredDate' => $extendDate,
+            'idStatus' => 1,
+            'lastUpdated' => $now,
+        ]);
+
+        return redirect(route('student.index'))->with('message', 'Thành công');
+    }
 }

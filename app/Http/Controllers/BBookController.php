@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BBookModel;
 use App\Models\BookModel;
+use App\Models\ChargeModel;
 use App\Models\ShelfStatusModel;
 use App\Models\StudentModel;
 use Carbon\Carbon;
@@ -76,46 +77,50 @@ class BBookController extends Controller
             ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
             ->where('bookTitle', '=', $book)->get();
 
-        foreach ($bookCheck as $bookCheck) {
-            if ($bookCheck->idStatus == 1) {
-                return redirect(route('bbook.index'))->with('danger', 'Sach khong duoc muon');
-            } else {
-                if ($dateCurrent > $dateReturn) {
-                    return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+        try {
+            foreach ($bookCheck as $bookCheck) {
+                if ($bookCheck->idStatus == 1) {
+                    return redirect(route('bbook.index'))->with('danger', 'Sach khong duoc muon');
                 } else {
-                    for ($i = 0; $i < count($book); $i++) {
+                    if ($dateCurrent > $dateReturn) {
+                        return redirect(route('bbook.index'))->with('danger', 'Ngày trả không được nhỏ hơn ngày mượn');
+                    } else {
+                        for ($i = 0; $i < count($book); $i++) {
 
-                        $quantity = BookModel::where('bookTitle', '=', $book[$i])->value('quantity');
+                            $quantity = BookModel::where('bookTitle', '=', $book[$i])->value('quantity');
 
-                        if ($quantity == 0) {
-                            return redirect(route('bbook.index'))->with('danger', 'Không còn đủ số lượng sách cho mượn');
-                        } else {
-                            $datasave = [
-                                'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
-                                'idStudent' => $idStudent[$i],
-                                'fromDate' => $dateCurrent[$i],
-                                'toDate' => $dateReturn[$i],
-                                'id' => $idStaff[$i],
-                                'note' => $note[$i]
-                            ];
-                            DB::table('borrowed_book')->insert($datasave);
-
-                            try {
-                                $iddata = BookModel::where('bookTitle', '=', $book[$i])->value('idBook');
-                                $dataupdate = [
-                                    'quantity' => $quantity - 1
+                            if ($quantity == 0) {
+                                return redirect(route('bbook.index'))->with('danger', 'Không còn đủ số lượng sách cho mượn');
+                            } else {
+                                $datasave = [
+                                    'idBook' => BookModel::where('bookTitle', '=', $book[$i])->value('idBook'),
+                                    'idStudent' => $idStudent[$i],
+                                    'fromDate' => $dateCurrent[$i],
+                                    'toDate' => $dateReturn[$i],
+                                    'id' => $idStaff[$i],
+                                    'note' => $note[$i]
                                 ];
+                                DB::table('borrowed_book')->insert($datasave);
 
-                                DB::table('book')->where('idBook', '=', $iddata)->update($dataupdate);
-                            } catch (\Throwable $th) {
-                                return redirect(route('bbook.index'))->with('danger', 'Sai roi');
+                                try {
+                                    $iddata = BookModel::where('bookTitle', '=', $book[$i])->value('idBook');
+                                    $dataupdate = [
+                                        'quantity' => $quantity - 1
+                                    ];
+
+                                    DB::table('book')->where('idBook', '=', $iddata)->update($dataupdate);
+                                } catch (\Throwable $th) {
+                                    return redirect(route('bbook.index'))->with('danger', 'Sai roi');
+                                }
                             }
                         }
-                    }
 
-                    return redirect(route('book.index'))->with('message', 'Mượn thành công');
+                        return redirect(route('book.index'))->with('message', 'Mượn thành công');
+                    }
                 }
             }
+        } catch (\Throwable $th) {
+            return redirect(route('bbook.index'))->with('danger', 'Khong co ma sinh vien nay');
         }
 
         //SELECT * FROM `book` inner JOIN shelf ON shelf.idShelf = book.idShelf
@@ -238,6 +243,12 @@ class BBookController extends Controller
             ->join('shelf_status', 'shelf_status.idStatus', '=', 'shelf.status')
             ->where('idBook', '=', $book)->get();
 
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
         foreach ($bookCheck as $bookCheck) {
             if ($bookCheck->idStatus == 1) {
                 return redirect(route('bbook.createBB'))->with('danger', 'Sach khong duoc muon');
@@ -310,5 +321,39 @@ class BBookController extends Controller
             ]);
 
         return redirect(route('history.index'))->with('message', 'Mượn thành công');
+    }
+
+    public function charge(Request $request)
+    {
+        $idBB = $request->get('idBB');
+        $money = $request->get('chargeMoney');
+        $reason = $request->get('reason');
+        $status = $request->get('status');
+        $now = Carbon::now();
+        $idBook = $request->get('idBook');
+        $quantity = BookModel::where('idBook', $idBook)->value('quantity');
+
+        $charge = new ChargeModel();
+        $charge->idBB = $idBB;
+        $charge->money = $money;
+        $charge->reason = $reason;
+        $charge->save();
+
+        if (isset($status)) {
+            BBookModel::where('idBB', $idBB)->update([
+                'status' => $status,
+                'actualDate' => $now,
+            ]);
+        } else{
+            BBookModel::where('idBB', $idBB)->update([
+                'status' => 0,
+                'actualDate' => $now,
+            ]);
+            BookModel::where('idBook', $idBook)->update([
+                'quantity' => $quantity + 1
+            ]);
+        }
+
+        return redirect(url('/dashboard'));
     }
 }

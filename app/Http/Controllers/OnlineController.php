@@ -54,7 +54,7 @@ class OnlineController extends Controller
             $dateCurrent = $request->get('dateCurrent');
             $dateReturn = $request->get('dateReturn');
             if($dateCurrent > $dateReturn){
-                return redirect(route('online.create'))->with('alert', 'Ngày trả không được nhỏ hơn ngày mượn');
+                return redirect(url('/online'))->with('alert', 'Ngày trả không được nhỏ hơn ngày mượn');
             } else {
                 $book = new BBookModel();
                 $book->idBook = $idBook;

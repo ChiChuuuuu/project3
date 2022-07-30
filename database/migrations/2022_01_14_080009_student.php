@@ -23,6 +23,7 @@ class Student extends Migration
             $table->date('expiredDate');
             $table->unsignedBigInteger('idStatus');
             $table->foreign('idStatus')->references('idStatus')->on('student_status');
+            $table->date('lastUpdated')->nullable();
         });
     }
 

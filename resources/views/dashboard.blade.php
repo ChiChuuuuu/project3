@@ -11,7 +11,7 @@
             <div class="main-container">
 
                 <div class="main-content">
-
+                    {{-- Thong ke chung --}}
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-4">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-
+                    {{-- Muon qua thoi han --}}
                     <div class="container-fluid">
 
                         <div class="card">
@@ -67,36 +67,100 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        {{-- action="{{ url('/lostBook', [$history->idBB, '3']) }}" --}}
                                         @forelse ($historys as $history)
                                             @if ($history->toDate <= $now)
-                                                <form method="GET"
-                                                    action="{{ url('/lostBook', [$history->idBB, '3']) }}">
-                                                    <tr>
-                                                        <td> </td>
-                                                        <td> {{ $history->bookTitle }} </td>
-                                                        <td> {{ $history->nameAuthor }} </td>
-                                                        <td> {{ $history->name }} |
-                                                            {{ date('d-m-Y', strtotime($history->dob)) }} |
-                                                            {{ $history->phone }}
-                                                        </td>
-                                                        <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
-                                                        </td>
-                                                        <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
-                                                        </td>
-                                                        <td> {{ $history->note }} </td>
-                                                        <td> {{ $history->username }} </td>
-                                                        <td>
-                                                            Đã quá hạn
-                                                            {{ $now->diffInDays($history->toDate) }} ngày
-                                                        </td>
-                                                        <td><Button rel="tooltip"
-                                                            class="btn btn-danger btn-xs-xl6">
-                                                            Sách đã mất
-                                                        </Button></td>
-                                                    </tr>
-                                                </form>
+                                                <tr>
+                                                    <td> </td>
+                                                    <td> {{ $history->bookTitle }} </td>
+                                                    <td> {{ $history->nameAuthor }} </td>
+                                                    <td> {{ $history->name }} |
+                                                        {{ date('d-m-Y', strtotime($history->dob)) }} |
+                                                        {{ $history->phone }}
+                                                    </td>
+                                                    <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                                    </td>
+                                                    <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                                    </td>
+                                                    <td> {{ $history->note }} </td>
+                                                    <td> {{ $history->username }} </td>
+                                                    <td>
+                                                        Đã quá hạn
+                                                        {{ $now->diffInDays($history->toDate) }} ngày
+                                                    </td>
+
+                                                    <td>
+                                                        <!-- Button trigger modal -->
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                            data-target="#exampleModal">
+                                                            <div style="color:red"> Nộp phạt </div>
+                                                        </button>
+
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                                            role="dialog" aria-labelledby="exampleModalLabel"
+                                                            aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel">Nộp phạt</h5>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form
+                                                                        action="{{ route('bbook.charge', ['idBB' => $history->idBB,'idBook' => $history->idBook]) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <div class="modal-body">
+                                                                            <div class="form-group row">
+                                                                                <label for="inputChargeMoney"
+                                                                                    class="col-sm-2 col-form-label">Số tiền
+                                                                                    phạt</label>
+                                                                                <div class="col-sm-10">
+                                                                                    <input type="text"
+                                                                                        id="inputChargeMoney"
+                                                                                        class="form-control"
+                                                                                        name="chargeMoney" required>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for="inputReason"
+                                                                                    class="col-sm-2 col-form-label">Lý
+                                                                                    do</label>
+                                                                                <div class="col-sm-10">
+                                                                                    <input type="text" id="inputReason"
+                                                                                        class="form-control" name="reason"
+                                                                                        required>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for="status"
+                                                                                    class="col-sm-2 col-form-label">Mất
+                                                                                    sách</label>
+                                                                                <input type="checkbox" id="status"
+                                                                                    name="status" value="3">
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button class="btn btn-primary">Save
+                                                                                changes</button>
+                                                                            <button type="button" class="btn btn-secondary"
+                                                                                data-dismiss="modal">Close</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    {{-- End modal --}}
+                                                </tr>
                                             @endif
+
+
 
                                         @empty
                                             <tr>
@@ -112,7 +176,7 @@
 
                     </div>
 
-
+                    {{-- Sach muon nhieu --}}
                     <div class="container-fluid">
                         <div class="col-sm-4">
                             <div class="card">
@@ -211,7 +275,7 @@
                             </div>
                         </div>
                     </div>
-
+                    {{-- Thong ke nam cu --}}
                     <div class="container-fluid">
                         <div class="col-sm-4">
                             <div class="card">
@@ -276,8 +340,41 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h4 class="title text-center">The vua gia han</h4>
+                                </div>
+
+                                <div class="content table-responsive table-full-width">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Mã thẻ</th>
+                                                <th>Họ và tên</th>
+                                                <th>Ngày gia hạn</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($extendCard as $extendCard)
+                                                <tr>
+                                                    <td class="text-center">
+                                                        {{ $extendCard->idStudent }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $extendCard->name }}
+                                                    </td>
+                                                    <td> {{ date('d-m-Y', strtotime($extendCard->lastUpdated)) }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Sach mat --}}
                     <div class="container-fluid">
 
                         <div class="card">
@@ -304,24 +401,24 @@
                                     <tbody>
 
                                         @forelse ($lostBook as $history)
-                                                <tr>
-                                                    <td> </td>
-                                                    <td> {{ $history->bookTitle }} </td>
-                                                    <td> {{ $history->nameAuthor }} </td>
-                                                    <td> {{ $history->name }} |
-                                                        {{ date('d-m-Y', strtotime($history->dob)) }} |
-                                                        {{ $history->phone }}
-                                                    </td>
-                                                    <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
-                                                    </td>
-                                                    <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
-                                                    </td>
-                                                    <td> {{ $history->note }} </td>
-                                                    <td> {{ $history->username }} </td>
-                                                    <td>
-                                                        <div style='color:red;'>Sách đã mất</div>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td> </td>
+                                                <td> {{ $history->bookTitle }} </td>
+                                                <td> {{ $history->nameAuthor }} </td>
+                                                <td> {{ $history->name }} |
+                                                    {{ date('d-m-Y', strtotime($history->dob)) }} |
+                                                    {{ $history->phone }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history->fromDate)) }}
+                                                </td>
+                                                <td> {{ date('d-m-Y', strtotime($history->toDate)) }}
+                                                </td>
+                                                <td> {{ $history->note }} </td>
+                                                <td> {{ $history->username }} </td>
+                                                <td>
+                                                    <div style='color:red;'>Sách đã mất</div>
+                                                </td>
+                                            </tr>
                                         @empty
                                             <tr>
                                                 <th></th>
@@ -334,6 +431,49 @@
                             </div>
                         </div>
 
+                    </div>
+                    {{-- Nop phat --}}
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title text-center">Nộp phạt </h4>
+                            </div>
+
+                            <div class="content table-responsive table-full-width">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">Mã thẻ</th>
+                                            <th>Người mượn</th>
+                                            <th>Tên sách</th>
+                                            <th>Tiền phạt</th>
+                                            <th>Lý do</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($charge as $charge)
+                                            <tr>
+                                                <td class="text-center">
+                                                    {{ $charge->idStudent }}
+                                                </td>
+                                                <td>
+                                                    {{ $charge->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $charge->bookTitle }}
+                                                </td>
+                                                <td>
+                                                    {{ $charge->money }}đ
+                                                </td>
+                                                <td>
+                                                    {{ $charge->reason }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

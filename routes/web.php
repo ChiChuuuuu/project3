@@ -72,6 +72,7 @@ Route::middleware([CheckLogin::class])->group(function () {
         Route::post('/saveBB', [BBookController::class, 'saveBB'])->name('saveBB');
         Route::get('/standby', [BBookController::class, 'standby'])->name('standby');
         Route::get('/standby-status/{idBB}/{status}', [BBookController::class, 'standbyStatus'])->name('standby-status');
+        Route::post('/charge',[BBookController::class, 'charge'])->name('charge');
     });
 
     Route::resource('bbook', BBookController::class);
@@ -82,6 +83,7 @@ Route::middleware([CheckLogin::class])->group(function () {
         Route::get('/insert-by-excel', [StudentController::class, 'insertByExcel'])->name('insert-by-excel');
         Route::post('/insert-by-excel-process', [StudentController::class, 'insertByExcelProcess'])->name('insert-by-excel-process');
         Route::get('/export', [StudentController::class, 'export'])->name('export-excel');
+        Route::get('/extend-card', [StudentController::class, 'extendCard'])->name('extend-card');
     });
 
     Route::get('/student/word-export/{id}', [StudentController::class, 'wordExport'])->name('word-export');

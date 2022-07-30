@@ -60,10 +60,78 @@
                                             </th>
                                             <td>
                                                 <a href="{{ url('/get-status', [$history->idBB, '0']) }}" rel="tooltip"
-                                                    class="btn btn-success btn-xs">
+                                                    class="btn btn-success btn-xs-xl6">
                                                     Trả sách
                                                 </a>
                                             </td>
+                                            <td>
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#exampleModal">
+                                                    <div style="color:red"> Nộp phạt </div>
+                                                </button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                                    role="dialog" aria-labelledby="exampleModalLabel"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Nộp phạt</h5>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <form
+                                                                action="{{ route('bbook.charge', ['idBB' => $history->idBB,'idBook' => $history->idBook]) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <label for="inputChargeMoney"
+                                                                            class="col-sm-2 col-form-label">Số tiền
+                                                                            phạt</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text"
+                                                                                id="inputChargeMoney"
+                                                                                class="form-control"
+                                                                                name="chargeMoney" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="inputReason"
+                                                                            class="col-sm-2 col-form-label">Lý
+                                                                            do</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" id="inputReason"
+                                                                                class="form-control" name="reason"
+                                                                                required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="status"
+                                                                            class="col-sm-2 col-form-label">Mất
+                                                                            sách</label>
+                                                                        <input type="checkbox" id="status"
+                                                                            name="status" value="3">
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-primary">Save
+                                                                        changes</button>
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            {{-- End modal --}}
                                         </tr>
                                     @empty
                                         <tr>

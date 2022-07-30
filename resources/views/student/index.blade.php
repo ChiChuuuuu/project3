@@ -34,6 +34,7 @@
                                         <th>Trạng thái</th>
                                         <th>In thẻ</th>
                                         <th>Hành động</th>
+                                        <th>#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,8 +69,11 @@
                                                 <a href="{{ route('student.edit', ['student' => $students->idStudent]) }}"
                                                     rel="tooltip" title="Edit Profile"
                                                     class="btn btn-success btn-simple btn-xs">
-                                                    <i class="fa fa-edit"></i>
+                                                    <i class="fa fa-edit fa-lg"></i>
                                                 </a>
+                                                @if ($students->idStatus == 2 || $students ->expiredDate < $now)
+                                                | <a href="{{ route('student.extend-card', ['idStudent'=>$students->idStudent]) }}">Gia han</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
