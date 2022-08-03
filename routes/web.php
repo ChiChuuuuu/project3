@@ -47,6 +47,7 @@ Route::middleware([CheckLogin::class])->group(function () {
     Route::get('/dashboard/export/{month}', [DashboardController::class, 'export'])->name('export-excel');
     Route::get('/dashboard/exportByYear/{year}', [DashboardController::class, 'exportByYear'])->name('exportByYear');
     Route::get('/lostBook/{idBB}/{status}', [DashboardController::class, 'lostBook'])->name('lostBook');
+    Route::get('/preview/{month}',[DashboardController::class, 'preview'])->name('preview');
 
 
     Route::prefix('book')->name('book.')->group(function () {

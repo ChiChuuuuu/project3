@@ -121,4 +121,12 @@ class DashboardController extends Controller
         return redirect(url('/dashboard'));
     }
 
+    public function preview(Request $request){
+        $month = $request->get('month');
+
+        return view('preview.preview',[
+            'month' => $month,
+        ]);
+    }
+
 }
