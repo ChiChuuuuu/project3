@@ -33,21 +33,26 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($book as $books)
-                                    <form method="GET" action="{{ route('bbook.standby-status', [$books->idBB, '1']) }}">
-                                        <tr>
-                                            <td class="text-center"> {{ $books->idStudent }} </td>
-                                            <td>{{ $books->name }} | {{ date('d-m-Y', strtotime($books->dob))}} | {{ $books->phone }}</td>
-                                            <td> {{ $books->bookTitle }} </td>
-                                            <td> {{ $books->nameAuthor }} </td>
-                                            <td><input type="text" class="form-control" name="note" required></td>
-                                            <td class="td-actions">
-                                                <Button rel="tooltip"
-                                                    class="btn btn-success btn-xs-xl6">
-                                                    Mượn sách
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                    </form>
+                                        <form method="GET"
+                                            action="{{ route('bbook.standby-status', [$books->idBB, '1']) }}">
+                                            <tr>
+                                                <td class="text-center"> {{ $books->idStudent }} </td>
+                                                <td>{{ $books->name }} | {{ date('d-m-Y', strtotime($books->dob)) }} |
+                                                    {{ $books->phone }}</td>
+                                                <td> {{ $books->bookTitle }} </td>
+                                                <td> {{ $books->nameAuthor }} </td>
+                                                <td><input type="text" class="form-control" name="note" required></td>
+                                                <td class="td-actions">
+                                                    <Button rel="tooltip" class="btn btn-success btn-xs-xl6">
+                                                        Mượn sách
+                                                    </Button>
+
+                                                    <a rel="tooltip" onclick="return confirm('Are you sure?')" href="{{ route('bbook.removeBBook', ['idBB'=>$books->idBB]) }}" class="btn btn-danger btn-xs-xl6">
+                                                        Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     @empty
                                         <tr>
                                             <td>

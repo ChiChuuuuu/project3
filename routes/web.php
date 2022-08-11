@@ -74,6 +74,7 @@ Route::middleware([CheckLogin::class])->group(function () {
         Route::get('/standby', [BBookController::class, 'standby'])->name('standby');
         Route::get('/standby-status/{idBB}/{status}', [BBookController::class, 'standbyStatus'])->name('standby-status');
         Route::post('/charge',[BBookController::class, 'charge'])->name('charge');
+        Route::get('/standby/removeBBook/{idBB}',[BBookController::class, 'removeBBook'])->name('removeBBook');
     });
 
     Route::resource('bbook', BBookController::class);

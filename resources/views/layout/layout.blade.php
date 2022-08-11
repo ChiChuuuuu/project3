@@ -22,6 +22,9 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="{{ asset('assets') }}/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+    {{-- chart morris --}}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 </head>
 
 <body>
@@ -229,6 +232,17 @@
 <script src="{{ asset('assets') }}/js/demo.js"></script>
 
 <script src="{{ asset('assets') }}/js/demo-select.js"></script>
+<script src="{{ asset('assets') }}/js/demo-chart.js"></script>
+
+{{-- Morris chart --}}
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+
+<script>
+    $().ready(function(){
+        demo.initCharts();
+    });
+</script>
 
 <script type="text/javascript">
     $(document).ready(function() {

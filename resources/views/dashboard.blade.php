@@ -1,6 +1,7 @@
 @extends('layout.layout')
 
 @section('main')
+
     <div class="wrapper">
         <div class="main-panel">
             <nav class="navbar navbar-default">
@@ -43,7 +44,35 @@
                     </div>
 
                     {{-- Sach muon nhieu --}}
+                    {{-- Chart thống kê --}}
                     <div class="container-fluid">
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div id="piechartDay" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div id="piechartMonth" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div id="piechart" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {{-- <div class="container-fluid">
                         <div class="col-sm-4">
                             <div class="card">
                                 <div class="header">
@@ -140,7 +169,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     {{-- Design thống kê chung --}}
                     <div class="container-fluid">
@@ -329,8 +358,7 @@
                                                                                             method="post">
                                                                                             @csrf
                                                                                             <div class="modal-body">
-                                                                                                <div
-                                                                                                    class="form-group row">
+                                                                                                <div class="form-group row">
                                                                                                     <label
                                                                                                         for="inputChargeMoney"
                                                                                                         class="col-sm-2 col-form-label">Số
@@ -425,7 +453,8 @@
                                                                         <td>
                                                                             {{ $extendCard->name }}
                                                                         </td>
-                                                                        <td> {{ date('d-m-Y', strtotime($extendCard->lastUpdated)) }}</td>
+                                                                        <td> {{ date('d-m-Y', strtotime($extendCard->lastUpdated)) }}
+                                                                        </td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -679,12 +708,12 @@
                     {{-- Sach mat --}}
                     {{-- <div class="container-fluid"> --}}
 
-                        {{-- <div class="card">
+                    {{-- <div class="card">
                             <div class="header">
                                 <h4 class="title">Sách đã mất</h4>
                             </div> --}}
 
-                            {{-- <div class="content table-responsive table-full-width">
+                    {{-- <div class="content table-responsive table-full-width">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -731,7 +760,7 @@
                                     </tbody>
                                 </table>
                             </div> --}}
-                        {{-- </div> --}}
+                    {{-- </div> --}}
 
                     {{-- </div> --}}
                     {{-- Nop phat --}}
@@ -780,13 +809,72 @@
                         </div>
                     </div> --}}
 
-
-
-
                 </div>
             </div>
         </div>
 
-    </div>
-    </div>
-@endsection
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
+            google.charts.setOnLoadCallback(drawChartMonth);
+            google.charts.setOnLoadCallback(drawChartDay);
+
+            function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Tên Sách', 'Số lần mượn'],
+                    <?php echo $chartDataYear; ?>
+                ]);
+
+                var options = {
+                    title: 'Sách được mượn nhiều trong năm',
+                    pieHole: 0.4,
+                    pieSliceText: 'value',
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChartMonth() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Tên Sách', 'Số lần mượn'],
+                    <?php echo $chartDataMonth; ?>
+                ]);
+
+                var options = {
+                    title: 'Sách được mượn nhiều trong tháng',
+                    pieHole: 0.4,
+                    pieSliceText: 'value',
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechartMonth'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChartDay() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Tên Sách', 'Số lần mượn'],
+                    <?php echo $chartDataDay; ?>
+                ]);
+
+                var options = {
+                    title: 'Sách được mượn nhiều trong ngày',
+                    pieHole: 0.4,
+                    pieSliceText: 'value',
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechartDay'));
+
+                chart.draw(data, options);
+            }
+        </script>
+    @endsection

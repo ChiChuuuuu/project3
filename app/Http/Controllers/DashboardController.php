@@ -84,6 +84,23 @@ class DashboardController extends Controller
         ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
         ->get();
 
+        $dataDay = "";
+        $dataMonth ="";
+        $dataYear = "";
+        foreach($mostBorrowedYear as $val){
+            $dataYear.="['".$val->bookTitle."',     ".$val->NoOfTimesBorrowed."],";
+        };
+        foreach($mostBorrowedDay as $val){
+            $dataDay.="['".$val->bookTitle."',     ".$val->NoOfTimesBorrowed."],";
+        };
+        foreach($mostBorrowedBook as $val){
+            $dataMonth.="['".$val->bookTitle."',     ".$val->NoOfTimesBorrowed."],";
+        };
+
+        $chartDataYear = $dataYear;
+        $chartDataMonth = $dataMonth;
+        $chartDataDay = $dataDay;
+
         return view('dashboard', [
             'historys' => $historys,
             'now' => $now,
@@ -100,6 +117,9 @@ class DashboardController extends Controller
             'expDate' => $expDate,
             'extendCard' => $extendCard,
             'charge' => $charge,
+            'chartDataYear' => $chartDataYear,
+            'chartDataMonth' => $chartDataMonth,
+            'chartDataDay' => $chartDataDay,
         ]);
     }
 

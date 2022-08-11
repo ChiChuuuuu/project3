@@ -187,7 +187,7 @@ class BBookController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 
     public function createBB()
@@ -355,5 +355,10 @@ class BBookController extends Controller
         }
 
         return redirect(url('/dashboard'));
+    }
+
+    public function removeBBook($id){
+        BBookModel::find($id)->delete();
+        return redirect(route('history.index'))->with('message', 'Xoa thành công');
     }
 }
