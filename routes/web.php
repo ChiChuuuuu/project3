@@ -41,13 +41,16 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Dashboard
 Route::middleware([CheckLogin::class])->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/preview/{month}',[DashboardController::class, 'preview'])->name('preview');
+        Route::get('/previewYear/{year}',[DashboardController::class, 'previewYear'])->name('previewYear');
+    });
 
     //dashboard
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
-    Route::get('/dashboard/export/{month}', [DashboardController::class, 'export'])->name('export-excel');
-    Route::get('/dashboard/exportByYear/{year}', [DashboardController::class, 'exportByYear'])->name('exportByYear');
+    Route::get('/dashboard/preview/export/{month}', [DashboardController::class, 'export'])->name('export-excel');
+    Route::get('/dashboard/previewYear/exportByYear/{year}', [DashboardController::class, 'exportByYear'])->name('exportByYear');
     Route::get('/lostBook/{idBB}/{status}', [DashboardController::class, 'lostBook'])->name('lostBook');
-    Route::get('/preview/{month}',[DashboardController::class, 'preview'])->name('preview');
 
 
     Route::prefix('book')->name('book.')->group(function () {

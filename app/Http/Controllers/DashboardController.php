@@ -141,11 +141,44 @@ class DashboardController extends Controller
         return redirect(url('/dashboard'));
     }
 
-    public function preview(Request $request){
-        $month = $request->get('month');
+    public function preview(Request $request,$month){
+
+        $now = Carbon::now();
+
+        $search2 = $request->get('search2');
+
+        $book = BBookModel::join('book', 'book.idBook', 'borrowed_book.idBook')
+            ->join('student', 'student.idStudent', 'borrowed_book.idStudent')
+            ->join('staff', 'staff.id', 'borrowed_book.id')
+            ->join('author', 'author.idAuthor', 'book.author')
+            ->whereMonth('fromDate', '=', $month)
+            ->whereYear('fromDate', '=', $now)
+            ->Where('bookTitle', 'LIKE', "%$search2%")
+            ->paginate(10);
 
         return view('preview.preview',[
             'month' => $month,
+            'book' => $book,
+            'search2' => $search2,
+        ]);
+    }
+
+    public function previewYear(Request $request,$year){
+
+        $search2 = $request->get('search2');
+
+        $book = BBookModel::join('book','book.idBook','borrowed_book.idBook')
+        ->join('student','student.idStudent','borrowed_book.idStudent')
+        ->join('staff','staff.id','borrowed_book.id')
+        ->join('author','author.idAuthor','book.author')
+        ->whereYear('fromDate','=',$year)
+        ->where('bookTitle', 'LIKE', "%$search2%")
+        ->paginate(10);
+
+        return view('preview.previewYear',[
+            'year' => $year,
+            'book' => $book,
+            'search2' => $search2,
         ]);
     }
 

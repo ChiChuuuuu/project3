@@ -46,7 +46,6 @@ class DashboardExport implements FromCollection, WithHeadings, WithMapping
             date("d-m-Y", strtotime($date)),
             date("d-m-Y", strtotime($date2)),
             date("d-m-Y", strtotime($date3)),
-            $student->username,
         ];
         return $data;
     }
@@ -54,7 +53,7 @@ class DashboardExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'Thẻ thư viện', 'Họ tên', 'SDT', 'Tên sách', 'Tác giả', 'Ngày mượn', 'Ngày trả dự kiến', 'Ngày trả', 'Người cho mượn'
+            'Thẻ thư viện', 'Họ tên', 'SDT', 'Tên sách', 'Tác giả', 'Ngày mượn', 'Ngày trả dự kiến', 'Ngày trả'
         ];
     }
 }

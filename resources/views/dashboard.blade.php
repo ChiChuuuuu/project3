@@ -628,8 +628,7 @@
                                                         Tháng {{ $period->Month }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('/dashboard/export', $period->Month) }}">Tải
-                                                            xuống</a>
+                                                        <a href="{{ route('dashboard.preview', $period->Month) }}">Xem dữ liệu</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -660,8 +659,7 @@
                                                         {{ $period->Year }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('/dashboard/exportByYear', $period->Year) }}">Tải
-                                                            xuống</a>
+                                                        <a href="{{ route('dashboard.previewYear', $period->Year) }}">Xem dữ liệu</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
