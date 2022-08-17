@@ -1,7 +1,6 @@
 @extends('layout.layout')
 
 @section('main')
-
     <div class="wrapper">
         <div class="main-panel">
             <nav class="navbar navbar-default">
@@ -66,6 +65,14 @@
                         <div class="col-md-4">
                             <div class="card">
                                 <div id="piechart" style="height: 500px;">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div id="piechartCate" style="height: 500px;">
 
                                 </div>
                             </div>
@@ -628,7 +635,8 @@
                                                         Tháng {{ $period->Month }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ route('dashboard.preview', $period->Month) }}">Xem dữ liệu</a>
+                                                        <a href="{{ route('dashboard.preview', $period->Month) }}">Xem dữ
+                                                            liệu</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -659,7 +667,8 @@
                                                         {{ $period->Year }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ route('dashboard.previewYear', $period->Year) }}">Xem dữ liệu</a>
+                                                        <a href="{{ route('dashboard.previewYear', $period->Year) }}">Xem
+                                                            dữ liệu</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -814,12 +823,13 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
         <script type="text/javascript">
-            google.charts.load('current', {
+        var chart1 = google.charts.load('current', {
                 'packages': ['corechart']
             });
             google.charts.setOnLoadCallback(drawChart);
             google.charts.setOnLoadCallback(drawChartMonth);
             google.charts.setOnLoadCallback(drawChartDay);
+            google.charts.setOnLoadCallback(drawChartCate);
 
             function drawChart() {
 
@@ -871,6 +881,24 @@
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechartDay'));
+
+                chart.draw(data, options);
+            }
+
+            function drawChartCate() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Tên thể loại', 'Số lần mượn'],
+                    <?php echo $chartDataCategory; ?>
+                ]);
+
+                var options = {
+                    title: 'Thể loại được mượn nhiều trong năm',
+                    pieHole: 0.4,
+                    pieSliceText: 'value',
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechartCate'));
 
                 chart.draw(data, options);
             }

@@ -68,6 +68,18 @@ class DashboardController extends Controller
         //AS NoOfTimesBorrowed FROM book LEFT JOIN borrowed_book ON book.idBook = borrowed_book.idBook
         //GROUP BY book.idBook ORDER BY NoOfTimesBorrowed DESC LIMIT 5
 
+        $mostBorrowedCat = DB::table('book')->select(DB::raw('category.idCategory, category.nameCategory, COUNT(category.idCategory) AS NoOfCategory'))
+        ->leftJoin('borrowed_book','book.idBook','borrowed_book.idBook')
+        ->leftJoin('category','book.category','category.idCategory')
+        ->groupBy('category.idCategory','category.nameCategory')
+        ->orderBy('NoOfCategory','DESC')
+        ->whereYear('fromDate', $now)
+        ->limit(5)->get();
+
+        //SELECT category.idCategory, category.nameCategory, COUNT(category.idCategory)
+        // AS NoOfCategory FROM book LEFT JOIN borrowed_book ON book.idBook = borrowed_book.idBook LEFT JOIN category ON book.category = category.idCategory
+        // GROUP BY category.idCategory ORDER BY NoOfCategory DESC LIMIT 5
+
         $expDate = Carbon::now()->addDays(45);
 
         $lostBook = BBookModel::join('book', 'book.idBook', 'borrowed_book.idBook')
@@ -87,6 +99,7 @@ class DashboardController extends Controller
         $dataDay = "";
         $dataMonth ="";
         $dataYear = "";
+        $dataCategory = "";
         foreach($mostBorrowedYear as $val){
             $dataYear.="['".$val->bookTitle."',     ".$val->NoOfTimesBorrowed."],";
         };
@@ -96,10 +109,14 @@ class DashboardController extends Controller
         foreach($mostBorrowedBook as $val){
             $dataMonth.="['".$val->bookTitle."',     ".$val->NoOfTimesBorrowed."],";
         };
+        foreach($mostBorrowedCat as $val){
+            $dataCategory.="['".$val->nameCategory."',     ".$val->NoOfCategory."],";
+        }
 
         $chartDataYear = $dataYear;
         $chartDataMonth = $dataMonth;
         $chartDataDay = $dataDay;
+        $chartDataCategory = $dataCategory;
 
         return view('dashboard', [
             'historys' => $historys,
@@ -120,6 +137,8 @@ class DashboardController extends Controller
             'chartDataYear' => $chartDataYear,
             'chartDataMonth' => $chartDataMonth,
             'chartDataDay' => $chartDataDay,
+            'chartDataCategory' => $chartDataCategory,
+            'mostBorrowedCat' => $mostBorrowedCat,
         ]);
     }
 
