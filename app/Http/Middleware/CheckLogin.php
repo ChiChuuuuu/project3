@@ -19,7 +19,7 @@ class CheckLogin
         if ($request->session()->exists('id')) {
             return $next($request);
         } else {
-            return redirect()->route('login')->with('message', 'Chua dang nhap');
+            return redirect()->route('login')->with('message', 'Chưa đăng nhập');
         }
     }
 }

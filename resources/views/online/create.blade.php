@@ -49,10 +49,10 @@
                                         <input type="number" id="phone" name="phone" class="form-control" required>
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label>Ngày sinh</label>
                                         <input type="date" class="form-control" name="dob" required>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="form-group">
                                         <label>Ngày mượn</label>

@@ -59,7 +59,6 @@ class OnlineController extends Controller
                 $book = new BBookModel();
                 $book->idBook = $idBook;
                 $book->idStudent = $idStudent;
-                $book->idStudent = $idStudent;
                 $book->fromDate = $dateCurrent;
                 $book->toDate = $dateReturn;
                 $book->status = $status;

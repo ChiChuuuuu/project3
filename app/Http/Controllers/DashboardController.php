@@ -9,6 +9,7 @@ use App\Models\BookModel;
 use App\Models\ChargeModel;
 use App\Models\StudentModel;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -26,11 +27,11 @@ class DashboardController extends Controller
         // SELECT * FROM `borrowed_book` WHERE MONTH(fromDate) = MONTH(CURRENT_DATE()) and YEAR(fromDate) = YEAR(CURRENT_DATE())
 
 
-        $bookByDay = BBookModel::whereDay('fromDate', '=', $now)->get();
+        $bookByDay = BBookModel::whereDay('fromDate', '=', $now)->whereMonth('fromDate', '=', $now)->get();
 
         $bookNotReturn = BBookModel::where('actualDate', '=', NULL)->where('status',1)->get();
 
-        $bookByYear = BBookModel::whereYear('fromDate', '=', $now);
+        $bookByYear = BBookModel::whereYear('fromDate', '=', $now)->get();
 
         $period = DB::table('borrowed_book')->select(DB::raw('MONTH(fromDate) as Month'), DB::raw('count("idBB") as bbook'))->groupBy(DB::raw('MONTH(fromDate)'))->get();
 
