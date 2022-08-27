@@ -51,11 +51,13 @@
                                                     <td> {{ date('d-m-Y', strtotime($history2->toDate)) }}
                                                     </td>
                                                     <td>
-                                                        {{-- @if(is_null($history2->actualDate))
-                                                        <span style="color:red">Sách chưa được trả</span>
-                                                        @else --}}
+                                                        @if($history2->status == 3)
+                                                        <span style="color:red">Khong co du lieu</span>
+                                                        @elseif(is_null($history2->actualDate))
+                                                        <span style="color:red">Khong co du lieu</span>
+                                                        @else
                                                         {{ date('d-m-Y', strtotime($history2->actualDate)) }}
-                                                        {{-- @endif --}}
+                                                        @endif
                                                     </td>
                                                     <td> {{ $history2->note }} </td>
                                                     <td>
@@ -67,7 +69,7 @@
                                                                 <span style="color:blue">Đã trả sách</span>
                                                             @endif
                                                         @else
-                                                        <span style="color:red">Sách đã mất</span>
+                                                        <span style="color:red">Sách đã mất hoặc chưa được trả</span>
                                                         @endif
                                                     </td>
                                                     <td></td>

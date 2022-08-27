@@ -52,7 +52,14 @@
                                                     </td>
                                                     <td> {{ date('d-m-Y', strtotime($history2->toDate)) }}
                                                     </td>
-                                                    <td> {{ date('d-m-Y', strtotime($history2->actualDate)) }}
+                                                    <td>
+                                                        @if($history2->status == 3)
+                                                        <span style="color:red">Khong co du lieu</span>
+                                                        @elseif(is_null($history2->actualDate))
+                                                        <span style="color:red">Khong co du lieu</span>
+                                                        @else
+                                                        {{ date('d-m-Y', strtotime($history2->actualDate)) }}
+                                                        @endif
                                                     </td>
                                                     <td> {{ $history2->note }} </td>
                                                     <td>
@@ -63,6 +70,8 @@
                                                             @else
                                                                 <span style="color:blue">Đã trả sách</span>
                                                             @endif
+                                                        @else
+                                                        <span style="color:red">Sách đã mất hoặc chưa được trả</span>
                                                         @endif
                                                     </td>
                                                     <td></td>

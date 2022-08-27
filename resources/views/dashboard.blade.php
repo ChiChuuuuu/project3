@@ -281,6 +281,7 @@
                                                                     <div style='color:red;'>Sách đã mất</div>
                                                                 </td>
                                                             </tr>
+
                                                         @empty
                                                             <tr>
                                                                 <th></th>
@@ -289,7 +290,9 @@
                                                         @endforelse
 
                                                     </tbody>
+
                                                 </table>
+                                                {{ $lostBook->links('pagination::bootstrap-4') }}
                                             </div>
                                         </div>
                                         <div id="style" class="tab-pane">
